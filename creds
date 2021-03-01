@@ -1,10 +1,5 @@
-gitlabAPI-Key: HFMispsjcHyE6xYu3Dxe
 
-
-
-
-
-docker exec -t -i d8719ccacd6b31637a19e8fd9fcc19634f31af8dcdae0f135824e28a27d495fd bash
+docker exec -t -i <DockerContainer-ID> bash
 # Im DockerContainer:
 python manage.py makemigrations
 python manage.py migrate
