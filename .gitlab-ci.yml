@@ -1,4 +1,4 @@
-image: busybox:latest
+# image: busybox:latest
 
 before_script:
   - echo "Before script section"
