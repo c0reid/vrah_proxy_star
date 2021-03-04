@@ -7,3 +7,6 @@ python manage.py createsuperuser
 
 # starte denn DockerContainer
 -  docker-compose up
+
+# Debugger with python in the background
+- python manage.py runserver 0.0.0.0:8889
