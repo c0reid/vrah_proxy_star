@@ -46,7 +46,7 @@ def register(request):
             user = form.save()
             username = form.cleaned_data.get('username')
             login(request, user)
-            return redirect("main:home")
+            return redirect("main:login")
 
         else:
             for msg in form.error_messages:

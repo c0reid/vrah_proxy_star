@@ -1,4 +1,10 @@
 
+Let's test if everything works until now. Run the following command.
+
+$ docker-compose up --build
+
+
+
 docker exec -t -i <DockerContainer-ID> bash
 # Im DockerContainer:
 
@@ -9,7 +15,7 @@ python manage.py createsuperuser
 # starte DockerContainer
 -  docker-compose up
 
-docker exec -t -i <DockerContainer-ID> bash
+docker exec -t -i vrahproxystardjango_web_1 bash python
 
 # Debugger with python in the background
 - python manage.py runserver 0.0.0.0:8889
