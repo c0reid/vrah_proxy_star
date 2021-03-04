@@ -1,12 +1,15 @@
 
 docker exec -t -i <DockerContainer-ID> bash
 # Im DockerContainer:
+
 python manage.py makemigrations
 python manage.py migrate
 python manage.py createsuperuser
 
-# starte denn DockerContainer
+# starte DockerContainer
 -  docker-compose up
+
+docker exec -t -i <DockerContainer-ID> bash
 
 # Debugger with python in the background
 - python manage.py runserver 0.0.0.0:8889

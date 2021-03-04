@@ -20,11 +20,12 @@
       <div class="collapse navbar-collapse" id="navbar10">
         <ul class="navbar-nav ml-auto">
           {% if user.is_authenticated %}
-            Hi {{ user.username }}!
-          {% else %}
-            <p>You are not logged in</p>
-            <a href="{% url 'main:login' %}">Log In</a>
-          {% endif %}
+  Hi {{ user.username }}!
+  <p><a href="{% url 'main:logout' %}">Log Out</a></p>
+{% else %}
+  <p>You are not logged in</p>
+  <a href="{% url 'main:login' %}">Log In</a>
+{% endif %}
           <li class="nav-item"> <a class="nav-link" href="#">Features</a> </li>
           <li class="nav-item"> <a class="nav-link" href="#">Pricing</a> </li>
           <li class="nav-item"> <a class="nav-link" href="#">About</a> </li>
