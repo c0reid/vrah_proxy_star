@@ -37,96 +37,47 @@
     <div class="container">
       <div class="row">
         <div class="col-md-12">
-          <ul class="nav nav-tabs">
-            <li class="nav-item"> <a href="" class="active nav-link" data-toggle="pill" data-target="#tabone"><i class="fa fa-home">&nbsp;Search</i></a> </li>
-            <li class="nav-item"> <a class="nav-link" href="" data-toggle="pill" data-target="#tabtwo"><i class="fa fa-bed">&nbsp;Check</i></a> </li>
-            <li class="nav-item"> <a href="" class="nav-link" data-toggle="pill" data-target="#tabthree"><i class="fa fa-shower"></i> Tab 3</a> </li>
-          </ul>
-          <div class="row">
-            <div class="col-md-3"></div>
-            <div class="col-md-3"></div>
-            <div class="col-md-3"></div>
-            <div class="col-md-3"></div>
-            <div class="col-md-3">
-              <div class="btn-group">
-                <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown"> Country</button>
-                <div class="dropdown-menu"> <a class="dropdown-item" href="#">Germany</a>
-                  <div class="dropdown-divider"></div>
-                  <a class="dropdown-item" href="#">Separated link</a>
-                </div>
-              </div>
-            </div>
-            <div class="col-md-3"></div>
-            <div class="col-md-3"></div>
-            <div class="col-md-3"></div>
-          </div>
-          <div class="tab-content mt-2">
-            <div class="tab-pane fade show active" id="tabone" role="tabpanel">
-              <div class="col-md-12">
-                <div class="col-md-12">
-                  <div class="table-responsive">
-                    <table class="table table-bordered ">
-                      <thead class="thead-dark">
-                        <tr>
-                          <th>Aktualisiert (min)</th>
-                          <th>Port</th>
-                          <th>IP Adresse</th>
-                          <th>Land</th>
-                          <th>Geschwindigkeit<br></th>
-                          <th>Sek.</th>
-                          <th>Online</th>
-                          <th>Protokoll</th>
-                          <th>Anonymität</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {% for ip in ipList %}
-                        <tr>
-                          <th>{{ip.0}}</th>
-                          <td>{{ip.1}}</td>
-                          <td>{{ip.2}}</td>
-                          <td>DE</td>
-                          <td style="">
-                            <div class="progress" style="">
-                              <div class="progress-bar progress-bar-striped" role="progressbar" style="width: {{ip.4}}%">{{ip.4}}%</div>
-                            </div>
-                          </td>
-                          <td>{{ip.5}}</td>
-                          <td>{{ip.6}}</td>
-                          <td>{{ip.7}}</td>
-                          <td>{{ip.8}}</td>
-                        </tr>
-                        {% endfor %}
-                        <tr></tr>
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="tab-pane fade" id="tabtwo" role="tabpanel">
-              <p class="">Which was created for the bliss of souls like mine. I am so happy, my dear friend, so absorbed in the exquisite.</p>
-            </div>
-            <div class="tab-pane fade" id="tabthree" role="tabpanel">
-              <p class="">When, while the lovely valley teems with vapour around me, and the meridian sun strikes the upper surface.</p>
+          <!--/*   Section für Template entwicklung */ -->
+
+          <form action = "" method = "post">
+            <div class="form-group">
+              <div class="col-md-6 form-horizontal">
+              {% csrf_token %}
+
+              {{form }}
+              <input type="submit" value="Submit">
             </div>
           </div>
+
+          </form>
+
+    <!--/*   Section für Template entwicklung FORM 2*/ -->
+
+
+          <form action="{% url "ProxyChecker:upload_csv" %}" method="POST" enctype="multipart/form-data" class="form-horizontal">
+          {% csrf_token %}
+          <div class="form-group">
+              <label for="name" class="col-md-3 col-sm-3 col-xs-12 control-label">File: </label>
+              <div class="col-md-6">
+                  <input type="file" name="csv_file" id="csv_file" required="True" class="form-control">
+              </div>
+          </div>
+          <div class="form-group">
+              <div class="col-md-3 col-sm-3 col-xs-12 col-md-offset-3" style="margin-bottom:10px;">
+                   <button class="btn btn-primary"> <span class="glyphicon glyphicon-upload" style="margin-right:5px;"></span>Upload </button>
+              </div>
+          </div>
+          </form>
+
+
+
+          <!--  Section für Template entwicklung -->
         </div>
       </div>
       <div class="row">
         <div class="col-md-4">
         </div>
         <div class="col-md-4"></div>
-        <div class="col-md-4">
-          <ul class="pagination">
-            <li class="page-item"> <a class="page-link" href="#">Prev</a> </li>
-            <li class="page-item"> <a class="page-link" href="#">1</a> </li>
-            <li class="page-item"> <a class="page-link" href="#">2</a> </li>
-            <li class="page-item active"> <a class="page-link" href="#">3</a> </li>
-            <li class="page-item"> <a class="page-link" href="#">4</a> </li>
-            <li class="page-item"> <a class="page-link" href="#">Next</a> </li>
-          </ul>
-        </div>
       </div>
     </div>
   </div>
@@ -134,103 +85,6 @@
     <div class="container">
       <div class="row">
         <div class="col-md-12"></div>
-      </div>
-    </div>
-  </div>
-  <div class="py-5">
-    <div class="container">
-      <div class="row">
-        <div class="col-md-6"></div>
-        <div class="col-md-6"><iframe width="100%" height="400" src="https://maps.google.com/maps?q=New%20York&amp;z=14&amp;output=embed" scrolling="no" frameborder="0"></iframe></div>
-      </div>
-    </div>
-  </div>
-  <div class="py-5">
-    <div class="container">
-      <div class="row">
-        <div class="text-center col-md-12">
-          <h1>Choose your plan</h1>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-lg-4 col-md-6 p-3">
-          <div class="card bg-light">
-            <div class="card-body p-4">
-              <div class="row">
-                <div class="col-8">
-                  <h3 class="mb-0">Start</h3>
-                </div>
-                <div class="col-4 text-right">
-                  <h2 class="mb-0"> <b>$0</b> </h2>
-                </div>
-              </div>
-              <p class="my-3">A wonderful serenity has taken possession of my entire soul.</p>
-              <ul class="pl-3">
-                <li>One</li>
-                <li>Two</li>
-                <li>Three</li>
-              </ul> <a class="btn btn-primary mt-3" href="#">Get started</a>
-            </div>
-          </div>
-        </div>
-        <div class="col-lg-4 col-md-6 p-3">
-          <div class="card bg-light">
-            <div class="card-body p-4">
-              <div class="row">
-                <div class="col-8">
-                  <h3 class="mb-0">Hobby</h3>
-                </div>
-                <div class="col-4 text-right">
-                  <h2 class="mb-0"> <b>$9</b> </h2>
-                </div>
-              </div>
-              <p class="my-3">I sink under the weight of the splendour of these visions!</p>
-              <ul class="pl-3">
-                <li>Four</li>
-                <li>Five</li>
-                <li>Six</li>
-              </ul> <a class="btn btn-primary mt-3" href="#">Get started</a>
-            </div>
-          </div>
-        </div>
-        <div class="col-lg-4 p-3">
-          <div class="card bg-light">
-            <div class="card-body p-4">
-              <div class="row">
-                <div class="col-8">
-                  <h3 class="mb-0">Pro</h3>
-                </div>
-                <div class="col-4 text-right">
-                  <h2 class="mb-0"> <b>$18</b> </h2>
-                </div>
-              </div>
-              <p class="my-3">I feel the presence of the Almighty, who formed us in his own image.</p>
-              <ul class="pl-3">
-                <li>Seven</li>
-                <li>Eight</li>
-                <li>Nine</li>
-              </ul> <a class="btn btn-primary mt-3" href="#">Get started</a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="py-5 text-center">
-    <div class="container">
-      <div class="row">
-        <div class="mx-auto col-md-7">
-          <h4 class="mb-3">You are in good company</h4>
-          <div class="row text-muted">
-            <div class="col-md-3 col-4 p-2 mb-2"> <i class="d-block fa fa-angellist fa-3x"></i> </div>
-            <div class="col-md-3 col-4 p-2 mb-2"> <i class="d-block fa fa-cc-visa fa-3x"></i> </div>
-            <div class="col-md-3 col-4 p-2 mb-2"> <i class="d-block fa fa-amazon fa-3x"></i> </div>
-            <div class="col-md-3 col-4 p-2 mb-2"> <i class="d-block fa fa-paypal fa-3x"></i> </div>
-            <div class="col-4 p-2 mb-2"> <i class="d-block fa fa-empire fa-3x"></i> </div>
-            <div class="col-4 p-2 mb-2"> <i class="d-block fa fa-rebel fa-3x"></i> </div>
-            <div class="col-4 p-2 mb-2"> <i class="d-block fa fa-first-order fa-3x"></i> </div>
-          </div>
-        </div>
       </div>
     </div>
   </div>

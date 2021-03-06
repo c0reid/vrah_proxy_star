@@ -1,39 +1,98 @@
-from django.shortcuts import render, redirect
-from django.http import HttpResponse
+from django.shortcuts import render, reverse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
-from django.contrib.auth import logout, authenticate, login
+from . import models
+from django.contrib.auth.models import User
+from .forms import InputForm
+import logging
+from django.contrib import messages
 
 
-import datetime
-import random
-import socket
-import struct
-# Create your views here.
+from .src.checker import ProxyChecker
+
+""" HELPS
+https://www.techiediaries.com/resetting-django-migrations/
+
+
+
+
+"""
+
+
 def ProxyChecker(request):
-    random.seed()
-    proxys=[]
-    defaultPorts = [80, 8080]
-    onlineStatus = ["yes","no"]
-    Protokoll = ["Socks5","Socks4","Http","Https"]
-    anonymitaet =["Elite","High Anonymous","Transparent","Anonymous"]
-    for i in range(150):
-        proxys.append([
-                        str(random.randint(1,10))+" min",
-                        str(defaultPorts[random.randint(0,1)]),
-                        socket.inet_ntoa(struct.pack('>I', random.randint(1, 0xffffffff))),
-                        str(random.randint(1,4))+"."+ str(random.randint(0, 99)),
-                        str(random.randint(0,100)),
-                        str(random.randint(0,2))+"."+str(random.randint(0, 99)),
-                        str(onlineStatus[random.randint(0,1)]),
-                        str(Protokoll[random.randint(0,3)]),
-                        str(anonymitaet[random.randint(0,3)])
-                        ]
-                        )
+    if request.method == 'GET':
+        form = InputForm()
+    else:
+        # A POST request: Handle Form Upload
+        form = InputForm(request.POST)  # Bind data from request.POST into a PostForm
+        # If data is valid, proceeds to create a new post and redirect the user
+        if form.is_valid():
+            user = form.cleaned_data['user']
+            # FileUpload = forms.FileUpload()
+            Textfield = form.cleaned_data['Textfield']
+            print(user, Textfield)
 
-        #ip = socket.inet_ntoa(struct.pack('>I', random.randint(1, 0xffffffff)))
-        #port = str(defaultPorts[random.randint(0,1)])
+            # save to db
+            user = User.objects.get(id=1)
+            proxy = models.UserProxy.objects.create(user=user, protokol="Socks5", country=Textfield)
+            proxy.save()
+            print(proxy.protokol)
 
-    print(proxys)
+            # return HttpResponseRedirect(reverse('post_detail',kwargs={'post_id': post.id}))
+
+    form = {}
+    form['form'] = InputForm()
+    return render(request, "ProxyChecker/Pchecker.html", form)
 
 
-    return render(request,'ProxyChecker/Pchecker.html', {"ipList":proxys})
+def upload_csv(request):
+    """
+    https://pythoncircle.com/post/30/how-to-upload-and-process-the-csv-file-in-django/
+    """
+    data = {}
+    if "GET" == request.method:
+        return render(request, "ProxyChecker/Pchecker.html", data)
+    # if not GET, then proceed
+    try:
+        csv_file = request.FILES["csv_file"]
+        if not csv_file.name.endswith('.csv'):
+            messages.error(request, 'File is not CSV type')
+            return HttpResponseRedirect(reverse("ProxyChecker:PChecker"))
+        # if file is too large, return
+        if csv_file.multiple_chunks():
+            messages.error(request, "Uploaded file is too big (%.2f MB)." % (csv_file.size / (1000 * 1000),))
+            return HttpResponseRedirect(reverse("ProxyChecker:PChecker"))
+
+            # loop over the lines and save them in db. If error , store as string and then display
+        file_data = csv_file.read().decode("utf-8")
+        lines = file_data.split("\n")
+        for line in lines:
+                fields = line.split(":")
+                data_dict = {}
+                data_dict["ipaddress"] = fields[0]
+                data_dict["port"] = fields[1]
+                #data_dict["First name"] = fields[2]
+                #data_dict["Last name"] = fields[3]
+                print( "\n" ,str(data_dict), "\n")
+
+                try:
+
+                    user = User.objects.get(id=1)
+                    proxy = models.UserProxy.objects.create(user=user, protokol="Socks5", ipAdress=data_dict['ipaddress'], port=data_dict['port'] )
+                    proxy.save()
+
+                    #form = EventsForm(data_dict) # <-----------------------
+                    #if form.is_valid():
+                    #    form.save()
+                    #else:
+                    #    logging.getLogger("error_logger").error(form.errors.as_json())
+                except Exception as e:
+                    logging.getLogger("error_logger").error(repr(e))
+
+                    pass
+
+    except Exception as e:
+            logging.getLogger("error_logger").error("Unable to upload file. " + repr(e))
+            messages.error(request, "Unable to upload file. " + repr(e))
+
+    return HttpResponseRedirect(reverse("ProxyChecker:PChecker"))
