@@ -23,7 +23,7 @@ class UserProxy(models.Model):
     port = models.IntegerField(blank=True,default=8080)
 
     def __str__(self):
-        return str(self.protokol) ,str(self.ipAdress), str(self.port), str(self.email)
+        return self.protokol ,self.ipAdress, self.port, self.email
 
 
 #class CSVFile(models.Model):
