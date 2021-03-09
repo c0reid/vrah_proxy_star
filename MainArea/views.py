@@ -37,6 +37,8 @@ def home_page_view(request):
     return render(request,'home.html', {"ipList":proxys})
 #   return HttpResponse('Hello, World!')
 
+def UserDashboard(request):
+    return render(request,'userDashboard/charts-chartjs.html', {"ipList":"proxys"})
 
 def login_request(request):
     print("rendern! ")
