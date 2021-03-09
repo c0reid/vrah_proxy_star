@@ -38,7 +38,24 @@ def home_page_view(request):
 #   return HttpResponse('Hello, World!')
 
 def UserDashboard(request):
-    return render(request,'userDashboard/charts-chartjs.html', {"ipList":"proxys"})
+    random.seed()
+    goodProxys = GoodProxy.objects.all()
+    proxys=[]
+    for proxy in goodProxys:
+        proxys.append([
+                        str(random.randint(1,10))+" min",
+                        proxy.ipAdress, # ipAdresse
+                        str(proxy.port), # port
+                        proxy.country,
+                        str(random.randint(40,100)),
+                        int(proxy.latenz),
+                        "online",
+                        proxy.protokol,
+                        proxy.anonymitaetsLevel
+                        ])
+        #ip = socket.inet_ntoa(struct.pack('>I', random.randint(1, 0xffffffff)))
+        #port = str(defaultPorts[random.randint(0,1)])
+    return render(request,'userDashboard/charts-chartjs.html',{"ipList":proxys})
 
 def login_request(request):
     print("rendern! ")
