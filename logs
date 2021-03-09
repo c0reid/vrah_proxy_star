@@ -19,3 +19,10 @@ docker exec -t -i vrahproxystardjango_web_1 bash python
 
 # Debugger with python in the background
 - python manage.py runserver 0.0.0.0:8889
+
+
+
+
+
+
+added GoodProxys, BadProxys, LoadedProxys and PorxyContainer -models to Proxychecker; Proxychecker is only ckecking when the proxy is not in BadProxys and GoodProxy, DB-commits working, homeSection is showing only working Proxys now"

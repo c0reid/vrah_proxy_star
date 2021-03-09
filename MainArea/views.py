@@ -3,6 +3,7 @@ from django.http import HttpResponse
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from .forms import NewUserForm
 from django.contrib.auth import logout, authenticate, login
+from ProxyChecker.models import GoodProxy
 
 
 import datetime
@@ -10,35 +11,29 @@ import random
 import socket
 import struct
 
-
-
 def home_page_view(request):
     random.seed()
+    goodProxys = GoodProxy.objects.all()
     proxys=[]
     defaultPorts = [80, 8080]
     onlineStatus = ["yes","no"]
     Protokoll = ["Socks5","Socks4","Http","Https"]
     anonymitaet =["Elite","High Anonymous","Transparent","Anonymous"]
-    for i in range(150):
+    for proxy in goodProxys:
         proxys.append([
                         str(random.randint(1,10))+" min",
-                        str(defaultPorts[random.randint(0,1)]),
-                        socket.inet_ntoa(struct.pack('>I', random.randint(1, 0xffffffff))),
-                        str(random.randint(1,4))+"."+ str(random.randint(0, 99)),
-                        str(random.randint(0,100)),
-                        str(random.randint(0,2))+"."+str(random.randint(0, 99)),
-                        str(onlineStatus[random.randint(0,1)]),
-                        str(Protokoll[random.randint(0,3)]),
-                        str(anonymitaet[random.randint(0,3)])
-                        ]
-                        )
-
+                        proxy.ipAdress, # ipAdresse
+                        str(proxy.port), # port
+                        proxy.country,
+                        str(random.randint(40,100)),
+                        int(proxy.latenz),
+                        "online",
+                        proxy.protokol,
+                        proxy.anonymitaetsLevel
+                        ])
         #ip = socket.inet_ntoa(struct.pack('>I', random.randint(1, 0xffffffff)))
         #port = str(defaultPorts[random.randint(0,1)])
-
     print(proxys)
-
-
     return render(request,'home.html', {"ipList":proxys})
 #   return HttpResponse('Hello, World!')
 

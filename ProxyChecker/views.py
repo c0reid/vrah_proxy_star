@@ -11,12 +11,7 @@ from django.contrib import messages
 from .src.checker import checkPROXY_DB
 """ HELPS
 https://www.techiediaries.com/resetting-django-migrations/
-
-
-
-
 """
-
 
 def ProxyChecker(request):
     if request.method == 'GET':
@@ -32,9 +27,7 @@ def ProxyChecker(request):
             user = User.objects.get(id=1) #TODO:: Die Proxy müssen immer zu dem eingellogten User eingetragen werden
             proxy = models.UserProxy.objects.create(user=user, protokol="Socks5", country=Textfield)
             proxy.save()
-
             #print(proxy.protokol)
-
             # return HttpResponseRedirect(reverse('post_detail',kwargs={'post_id': post.id}))
 
     form = {}
@@ -43,7 +36,7 @@ def ProxyChecker(request):
 
 
 def upload_csv(request):
-    checkPROXY_DB()
+
     """
     https://pythoncircle.com/post/30/how-to-upload-and-process-the-csv-file-in-django/
     """
@@ -73,13 +66,11 @@ def upload_csv(request):
                 #data_dict["First name"] = fields[2]
                 #data_dict["Last name"] = fields[3]
                 #print( "\n" ,str(data_dict), "\n")
-
                 try:
-
-
-                    proxy = models.UserProxy.objects.create(user=user, protokol="Socks5", ipAdress=data_dict['ipaddress'], port=data_dict['port'] )
+                    proxy = models.UserProxy.objects.create(user=user,
+                                                            ipAdress=data_dict['ipaddress'],
+                                                            port=data_dict['port'])
                     proxy.save()
-
                     #form = EventsForm(data_dict) # <-----------------------
                     #if form.is_valid():
                     #    form.save()
@@ -95,9 +86,8 @@ def upload_csv(request):
     except Exception as e:
             logging.getLogger("error_logger").error("Unable to upload file. " + repr(e))
             messages.error(request, "Unable to upload file. " + repr(e))
-    # Get Proxy form the Database
 
-    getDBProxys()
+    checkPROXY_DB()
 
 
     return HttpResponseRedirect(reverse("ProxyChecker:PChecker"))

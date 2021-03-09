@@ -6,11 +6,20 @@
 
 #from getproxy import GetProxy
 #g = GetProxy()
-
 from proxy_checker import ProxyChecker
-from ProxyChecker.models import UserProxy
+from ProxyChecker.models import UserProxy, LoadedPrxy, GoodProxy, BadProxy
+from django.core.exceptions import ObjectDoesNotExist
+from django.db.models import Count, Max
+from django.utils import timezone
+from django.contrib.auth.models import User
 
 
+#Colours
+red="\033[1;31m"
+green="\033[1;32m"
+yellow="\033[1;33m"
+blue="\033[1;34m"
+defcol = "\033[0m"
 
 def getDBProxys():
     dbProxys = UserProxy.objects.all().filter(user=1)
@@ -22,61 +31,75 @@ def getDBProxys():
     print("Es sind:", len(dbProxys), "Datensätze")
     return testProxy
 
+def LoadProxys():
+    pass
+
+def CleanUpMainProxyDatabase():
+    unique_fields = ['ipAdress', 'port']
+    print(UserProxy.objects.values(*unique_fields).count())
+    duplicates = (
+        UserProxy.objects.values(*unique_fields)
+        .order_by()
+        .annotate(max_id=Max('id'), count_id=Count('id'))
+        .filter(count_id__gt=1)
+    )
+
+    for duplicate in duplicates:
+        (
+            UserProxy.objects
+            .filter(**{x: duplicate[x] for x in unique_fields})
+            .exclude(id=duplicate['max_id'])
+            .delete()
+        )
+    print(UserProxy.objects.values(*unique_fields).count())
+    print("\033[1;32mMainDatabase von Duplikaten befreit")
+
 def checkPROXY_DB():
-    dbProxys = UserProxy.objects.all().filter(user=1)
+    CleanUpMainProxyDatabase()
+    user = User.objects.get(id=1)
+    dbProxys = UserProxy.objects.all().filter(user=user)
+    badProxy = BadProxy.objects.all().filter(user=user)
+    goodProxys = GoodProxy.objects.all().filter(user=user)
     #testProxy = []
     checker = ProxyChecker()
     for i in dbProxys:
-        #testProxy.append(i.ipAdress+":"+str(i.port))
-        print("Checke Proxy:", str(i.id), i.ipAdress+":"+str(i.port))
-        tesstproxy=checker.check_proxy(i.ipAdress+":"+str(i.port))
-        if tesstproxy == False:
-                proxy = UserProxy.objects.get(id=i.id)
-                proxy.delete()
-                print("Delete Proxy by id:", i.id)
+        # ProxyId ran holen
+        proxy = dbProxys.get(id=i.id)
+        # ist der Proxy in der BadProxy List =
+        badProxyCount=BadProxy.objects.filter(ipAdress=i.ipAdress,port=i.port).count()
+        goodProxyCount=GoodProxy.objects.filter(ipAdress=i.ipAdress,port=i.port).count()
+        if badProxyCount and goodProxyCount == 0:
+            print(defcol+"Proxy not in Bad and Good -Proxylist\nChecking Proxy:", str(i.id), i.ipAdress+":"+str(i.port))
+            tesstproxy=checker.check_proxy(i.ipAdress+":"+str(i.port))
+            if tesstproxy == False:
+                try:
+                    newbadProxy = badProxy.create(user_id=1,
+                                                    ipAdress=i.ipAdress,
+                                                    port=i.port)
+                    newbadProxy.save()
+                    print(red+"Bad ProxyId:{}:added to BadProxys".format(i.id))
 
+                    #Aktualsiere Badproxys
+                    badProxy = BadProxy.objects.all().filter(user=user)
+                except ObjectDoesNotExist as DoesNotExist:
+                    print(red+"Fehler!!! ObjectDoesNotExist ")
+            else:
+                try:
+                    if goodProxyCount == 0:
+                        newgoodProxy = goodProxys.create(user_id=1,
+                                                        ipAdress=i.ipAdress,
+                                                        port=i.port,
+                                                        protokol = tesstproxy['protocols'][0],
+                                                        anonymitaetsLevel=tesstproxy["anonymity"],
+                                                        latenz=tesstproxy["timeout"],
+                                                        countryCode=tesstproxy["country_code"],
+                                                        country=tesstproxy["country"],
+                                                        )
+                        newgoodProxy.save()
+                        print(green+"Proxy mit der ID:",i.id,"wurde Validiert und zu GoodProxys hinzugefügt!!")
 
-        print(tesstproxy)
-
-
-
-"""
-class ProxyChecker(object):
-    def __init__(self, user,request):
-        self.request = request
-        self.user = user
-
-    def GetDBProxysList(request, self):
-        dbProxys = models.UserProxy.objects.filter(user=user)
-        for i in range(100):
-
-            print("Datenbankproxies abrufen!!")
-            print(len(dbProxys))
-            print(i)
-        pass
-
-            https://github.com/fate0/getproxy
-            from getproxy import GetProxy
-        g = GetProxy()
-
-        # 1. 初始化，必须步骤
-        g.init()
-
-        # 2. 加载 input proxies 列表
-        g.load_input_proxies()
-
-        # 3. 验证 input proxies 列表
-        g.validate_input_proxies()
-
-        # 4. 加载 plugin
-        g.load_plugins()
-
-        # 5. 抓取 web proxies 列表
-        g.grab_web_proxies()
-
-        # 6. 验证 web proxies 列表
-        g.validate_web_proxies()
-
-        # 7. 保存当前所有已验证的 proxies 列表
-        g.save_proxies()
-"""
+                except ObjectDoesNotExist as DoesNotExist:
+                    print("Fehler!!! ObjectDoesNotExist")
+        else:
+            print("Ist in der GoodProxy or BadProxy -list!")
+    print("alle Proxys wurden getestet!!!")

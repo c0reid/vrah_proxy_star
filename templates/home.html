@@ -19,6 +19,7 @@
       </button>
       <div class="collapse navbar-collapse" id="navbar10">
         <ul class="navbar-nav ml-auto">
+          <li class="nav-item"> <a class="nav-link" href="#">Check Proxys</a> </li>
           <li class="nav-item"> <a class="nav-link" href="#">Features</a> </li>
           <li class="nav-item"> <a class="nav-link" href="#">Pricing</a> </li>
           <li class="nav-item"> <a class="nav-link" href="#">About</a> </li>
@@ -69,11 +70,11 @@
                       <thead class="thead-dark">
                         <tr>
                           <th>Aktualisiert (min)</th>
-                          <th>Port</th>
                           <th>IP Adresse</th>
+                          <th>Port</th>
                           <th>Land</th>
                           <th>Geschwindigkeit<br></th>
-                          <th>Sek.</th>
+                          <th>Latenz(ms)</th>
                           <th>Online</th>
                           <th>Protokoll</th>
                           <th>Anonymität</th>
@@ -85,7 +86,7 @@
                           <th>{{ip.0}}</th>
                           <td>{{ip.1}}</td>
                           <td>{{ip.2}}</td>
-                          <td>DE</td>
+                          <td>{{ip.3}}</td>
                           <td style="">
                             <div class="progress" style="">
                               <div class="progress-bar progress-bar-striped" role="progressbar" style="width: {{ip.4}}%">{{ip.4}}%</div>
