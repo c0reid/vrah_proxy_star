@@ -4,7 +4,9 @@ stages:
   - deploy
 test:
   stage: test
-  script: echo "Testing the app"
+  script:
+    - echo "Testing the app"
+    - echo $CI_JOB_STAGE
 build:
   stage: build
   script:
