@@ -1,5 +1,6 @@
 
 
+<<<<<<< HEAD
 #import gevent
 #from gevent import monkey
 #monkey.patch_all()
@@ -103,3 +104,12 @@ def checkPROXY_DB():
         else:
             print("Ist in der GoodProxy or BadProxy -list!")
     print("alle Proxys wurden getestet!!!")
+=======
+class ProxyChecker():
+    def __self__(self):
+        pass
+    """
+    https://github.com/fate0/getproxy
+
+    """
+>>>>>>> parent of e3f2446... proxychecker sockss5/4 and is cleaning up the Database

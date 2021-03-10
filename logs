@@ -6,6 +6,7 @@ $ docker-compose up --build
 
 
 docker exec -t -i <DockerContainer-ID> bash
+docker exec -t -i vrahproxystardjango_web_1 bash python
 # Im DockerContainer:
 
 python manage.py makemigrations

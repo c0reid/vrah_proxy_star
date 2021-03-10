@@ -79,11 +79,15 @@ class BadProxy(models.Model):
     ipAdress = models.GenericIPAddressField(default="")
     port = models.IntegerField(default=0)
     def __str__(self):
+<<<<<<< HEAD
         return "{1}:{2} {3} {0} {4} {5} {6}".format(self.protokol ,self.ipAdress, self.port, self.email,self.anonymitaetsLevel, self.country, self.latenz)
 
 
 
 
+=======
+        return str(self.protokol) ,str(self.ipAdress), str(self.port), str(self.email)
+>>>>>>> parent of e3f2446... proxychecker sockss5/4 and is cleaning up the Database
 
 
 #class CSVFile(models.Model):
