@@ -14,8 +14,8 @@ from pathlib import Path
 import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
-# BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+#BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
@@ -27,7 +27,7 @@ SECRET_KEY = '99#6curil50+$n5o&fr(n2zwq3^(xkgq$)9dcxhfmk=2f69$7('
 DEBUG = True
 
 ALLOWED_HOSTS = ['*']
-
+# STATICFILES_STORAGE ='whitenoise.django.GzipManifestStaticFilesStorage'
 
 # Application definition
 
@@ -137,6 +137,7 @@ STATIC_URL = '/static/'
 #--------------------------------------------------
 #STATIC_ROOT = os.path.join(BASE_DIR, 'root')
 #-----------------------------------------------------
+
 STATICFILES_DIRS = [
-        os.path.join(BASE_DIR, 'static'),
+        os.path.join(BASE_DIR, 'static')
 ]
