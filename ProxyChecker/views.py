@@ -8,8 +8,7 @@ import logging
 from django.contrib import messages
 
 
-from .src.checker import ProxyChecker
-
+from .src.checker import checkPROXY_DB
 """ HELPS
 https://www.techiediaries.com/resetting-django-migrations/
 """
@@ -22,21 +21,13 @@ def ProxyChecker(request):
         form = InputForm(request.POST)  # Bind data from request.POST into a PostForm
         # If data is valid, proceeds to create a new post and redirect the user
         if form.is_valid():
-            user = form.cleaned_data['user']
             # FileUpload = forms.FileUpload()
             Textfield = form.cleaned_data['Textfield']
-            print(user, Textfield)
-
             # save to db
-            user = User.objects.get(id=1)
+            user = User.objects.get(id=1) #TODO:: Die Proxy müssen immer zu dem eingellogten User eingetragen werden
             proxy = models.UserProxy.objects.create(user=user, protokol="Socks5", country=Textfield)
             proxy.save()
-<<<<<<< HEAD
             #print(proxy.protokol)
-=======
-            print(proxy.protokol)
-
->>>>>>> parent of e3f2446... proxychecker sockss5/4 and is cleaning up the Database
             # return HttpResponseRedirect(reverse('post_detail',kwargs={'post_id': post.id}))
 
     form = {}
@@ -45,13 +36,11 @@ def ProxyChecker(request):
 
 
 def upload_csv(request):
-<<<<<<< HEAD
 
-=======
->>>>>>> parent of e3f2446... proxychecker sockss5/4 and is cleaning up the Database
     """
     https://pythoncircle.com/post/30/how-to-upload-and-process-the-csv-file-in-django/
     """
+    user = User.objects.get(id=1)
     data = {}
     if "GET" == request.method:
         return render(request, "ProxyChecker/Pchecker.html", data)
@@ -76,20 +65,11 @@ def upload_csv(request):
                 data_dict["port"] = fields[1]
                 #data_dict["First name"] = fields[2]
                 #data_dict["Last name"] = fields[3]
-<<<<<<< HEAD
                 #print( "\n" ,str(data_dict), "\n")
                 try:
                     proxy = models.UserProxy.objects.create(user=user,
                                                             ipAdress=data_dict['ipaddress'],
                                                             port=data_dict['port'])
-=======
-                print( "\n" ,str(data_dict), "\n")
-
-                try:
-
-                    user = User.objects.get(id=1)
-                    proxy = models.UserProxy.objects.create(user=user, protokol="Socks5", ipAdress=data_dict['ipaddress'], port=data_dict['port'] )
->>>>>>> parent of e3f2446... proxychecker sockss5/4 and is cleaning up the Database
                     proxy.save()
                     #form = EventsForm(data_dict) # <-----------------------
                     #if form.is_valid():
@@ -101,14 +81,13 @@ def upload_csv(request):
 
                     pass
 
+
+
     except Exception as e:
             logging.getLogger("error_logger").error("Unable to upload file. " + repr(e))
             messages.error(request, "Unable to upload file. " + repr(e))
-<<<<<<< HEAD
 
     checkPROXY_DB()
 
-=======
->>>>>>> parent of e3f2446... proxychecker sockss5/4 and is cleaning up the Database
 
     return HttpResponseRedirect(reverse("ProxyChecker:PChecker"))

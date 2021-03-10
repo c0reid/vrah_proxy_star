@@ -1,9 +1,7 @@
+{% load static %}
 <!doctype html>
 <html lang="en">
-
-
-<!-- Mirrored from demo.dashboardpack.com/architectui-html-free/ by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 09 Mar 2021 18:52:23 GMT -->
-<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -13,17 +11,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, shrink-to-fit=no" />
     <meta name="description" content="This is an example dashboard created using build-in elements and components.">
     <meta name="msapplication-tap-highlight" content="no">
-    <!--
-    =========================================================
-    * ArchitectUI HTML Theme Dashboard - v1.0.0
-    =========================================================
-    * Product Page: https://dashboardpack.com
-    * Copyright 2019 DashboardPack (https://dashboardpack.com)
-    * Licensed under MIT (https://github.com/DashboardPack/architectui-html-theme-free/blob/master/LICENSE)
-    =========================================================
-    * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-    -->
-<link href="main.css" rel="stylesheet"></head>
+<link href="{% static 'userDashboard/assets/css/main.css' %}" rel="stylesheet"></head>
 <body>
     <div class="app-container app-theme-white body-tabs-shadow fixed-sidebar fixed-header">
         <div class="app-header header-shadow">
@@ -107,14 +95,10 @@
                                 </div>
                                 <div class="widget-content-left  ml-3 header-user-info">
                                     <div class="widget-heading">
-                                        Vrah Proxy-Star
+                                        Alina Mclourd
                                     </div>
                                     <div class="widget-subheading">
-                                      {% if user.is_authenticated %}
-                                        Hi {{ user.username }}!
-                                        {% else %}
-                                        Login or register
-                                        {% endif %}
+                                        VP People Manager
                                     </div>
                                 </div>
                                 <div class="widget-content-right header-user-info ml-3">
@@ -740,7 +724,7 @@
                                 <div class="card mb-3 widget-content bg-midnight-bloom">
                                     <div class="widget-content-wrapper text-white">
                                         <div class="widget-content-left">
-                                            <div class="widget-heading">Total Orders</div>
+                                            <div class="widget-heading">Total Proxies</div>
                                             <div class="widget-subheading">Last year expenses</div>
                                         </div>
                                         <div class="widget-content-right">
@@ -1121,7 +1105,7 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="main-card mb-3 card">
-                                    <div class="card-header">Active Proxys
+                                    <div class="card-header">Active Users
                                         <div class="btn-actions-pane-right">
                                             <div role="group" class="btn-group-sm btn-group">
                                                 <button class="active btn btn-focus">Last Week</button>
@@ -1133,39 +1117,36 @@
                                         <table class="align-middle mb-0 table table-borderless table-striped table-hover">
                                             <thead>
                                             <tr>
-                                                <th class="text-center">#</th>
-                                                <th>Name</th>
-                                                <th class="text-center">City</th>
+                                                <th class="text-center">Updated(min)</th>
+                                                <th class="text-center">IP Adress</th>
+                                                <th class="text-center">Geschwindigkeit<br></th>
                                                 <th class="text-center">Status</th>
-                                                <th class="text-center">Actions</th>
+                                                <th class="text-center">Latenz(ms)</th>
+                                                <th class="text-center">Online</th>
+                                                <th class="text-center">Protokoll</th>
+                                                <th class="text-center">Anonymität</th>
+                                                <th class="text-center">Info</th>
                                             </tr>
                                             </thead>
                                             <tbody>
-                                            <tr>
-                                                <td class="text-center text-muted">#345</td>
-                                                <td>
-                                                    <div class="widget-content p-0">
-                                                        <div class="widget-content-wrapper">
-                                                            <div class="widget-content-left mr-3">
-                                                                <div class="widget-content-left">
-                                                                    <img width="40" class="rounded-circle" src="assets/images/avatars/4.jpg" alt="">
-                                                                </div>
-                                                            </div>
-                                                            <div class="widget-content-left flex2">
-                                                                <div class="widget-heading">John Doe</div>
-                                                                <div class="widget-subheading opacity-7">Web Developer</div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
+
+                                              {% for ip in ipList %}
+                                              <tr>
+                                                <th>{{ip.0}}</th>
+                                                <td>{{ip.1}}</td>
+                                                <td>{{ip.2}}</td>
+                                                <td>{{ip.3}}</td>
+                                                <td style="">
+                                                  <div class="progress" style="">
+                                                    <div class="progress-bar progress-bar-striped" role="progressbar" style="width: {{ip.4}}%">{{ip.4}}%</div>
+                                                  </div>
                                                 </td>
-                                                <td class="text-center">Madrid</td>
-                                                <td class="text-center">
-                                                    <div class="badge badge-warning">Pending</div>
-                                                </td>
-                                                <td class="text-center">
-                                                    <button type="button" id="PopoverCustomT-1" class="btn btn-primary btn-sm">Details</button>
-                                                </td>
-                                            </tr>
+                                                <td>{{ip.5}}</td>
+                                                <td>{{ip.6}}</td>
+                                                <td>{{ip.7}}</td>
+                                                <td>{{ip.8}}</td>
+                                              </tr>
+                                              {% endfor %}
                                             <tr>
                                                 <td class="text-center text-muted">#347</td>
                                                 <td>
@@ -1377,7 +1358,7 @@
                 <script src="http://maps.google.com/maps/api/js?sensor=true"></script>
         </div>
     </div>
-<script type="text/javascript" src="assets/scripts/main.js"></script></body>
+<script type="text/javascript" src="{% static 'userDashboard/assets/scripts/main.js' %}"></script></body>
 
 <!-- Mirrored from demo.dashboardpack.com/architectui-html-free/ by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 09 Mar 2021 18:52:32 GMT -->
 </html>
