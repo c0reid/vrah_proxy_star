@@ -45,6 +45,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware', # added
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -86,7 +87,6 @@ DATABASES = {
         'PORT': 5432,
     }
 }
-
 
 #DATABASES = {
 #    'default': {
@@ -136,10 +136,11 @@ STATIC_URL = '/static/'
 MEDIA_URL = '/images/'
 
 #--------------------------------------------------
-#STATIC_ROOT = os.path.join(BASE_DIR, 'root')
+STATIC_ROOT = os.path.join(BASE_DIR, 'root')
 #-----------------------------------------------------
 print(BASE_DIR)
 print((BASE_DIR, 'static'))
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 STATICFILES_DIRS = [
         os.path.join(BASE_DIR, 'static')
 ]

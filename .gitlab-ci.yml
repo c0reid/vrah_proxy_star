@@ -13,7 +13,7 @@ build:
   stage: build
   script:
   - echo "Building the app"
-  - docker-compose build
+#  - docker-compose build
 deploy_staiging:
   stage: deploy
   only:
