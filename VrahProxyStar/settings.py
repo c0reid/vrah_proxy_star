@@ -28,6 +28,9 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 # STATICFILES_STORAGE ='whitenoise.django.GzipManifestStaticFilesStorage'
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
+
 
 # Application definition
 
@@ -40,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'MainArea',
     'ProxyChecker',
+    'crispy_forms', # pip install django-crispy-forms
 ]
 
 MIDDLEWARE = [

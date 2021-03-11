@@ -1,5 +1,4 @@
 {% load static %}
-{%load crispy_forms_tags %}
 <!DOCTYPE html>
 <html lang="en">
    <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
@@ -23,18 +22,10 @@
       <div class="limiter">
          <div class="container-login100">
             <div class="wrap-login100 p-l-85 p-r-85 p-t-55 p-b-55">
-							<form method="POST" class="login100-form validate-form flex-sb flex-w">
-			        {% csrf_token %}
-			        {{ form|crispy }}
-			            <button style="background-color:#F4EB16; color:blue" class="btn btn-outline-info" type="submit">Login</button>
-			        </form>
-
-
-
                <form class="login100-form validate-form flex-sb flex-w">
                   <span class="login100-form-title p-b-32">Account Login</span>
                   <span class="txt1 p-b-11">Username</span>
-                  <!--div class="wrap-input100 validate-input m-b-36" data-validate="Username is required">
+                  <div class="wrap-input100 validate-input m-b-36" data-validate="Username is required">
                      <input class="input100" type="text" name="username">
                      <span class="focus-input100"></span>
                   </div>
@@ -45,7 +36,7 @@
                      </span>
                      <input class="input100" type="password" name="pass">
                      <span class="focus-input100"></span>
-                  </div-->
+                  </div>
                   <div class="flex-sb-m w-full p-b-48">
                      <div class="contact100-form-checkbox">
                         <input class="input-checkbox100" id="ckb1" type="checkbox" name="remember-me">

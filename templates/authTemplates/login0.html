@@ -1,0 +1,12 @@
+{% extends 'base/header.html' %}
+
+{% block content %}
+    <div class="container">
+        <form method="POST">
+        {% csrf_token %}
+        {{ form|crispy }}
+            <button style="background-color:#F4EB16; color:blue" class="btn btn-outline-info" type="submit">Login</button>
+        </form>
+        Du hast keinen Account? <a href="/register" target="blank"><strong>hier registrieren</strong></a>!
+    </div>
+{% endblock %}

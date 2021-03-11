@@ -5,11 +5,11 @@ from .forms import NewUserForm
 from django.contrib.auth import logout, authenticate, login
 from ProxyChecker.models import GoodProxy
 
-
 import datetime
 import random
 import socket
 import struct
+from django.contrib import messages
 
 def home_page_view(request):
     random.seed()
@@ -69,7 +69,7 @@ def login_request(request):
                 login(request, user)
                 messages.info(request, f"You are now logged in as {username}")
                 print("Sie sind eingelogt")
-                return redirect('/')
+                return redirect('/dashboard')
             else:
                 messages.error(request, "Invalid username or password.")
         else:
@@ -77,7 +77,7 @@ def login_request(request):
     form = AuthenticationForm()
 
     return render(request = request,
-                    template_name = "authTemplates/login.html",
+                    template_name = "authTemplates/login3.html",
                     context={"form":form})
 
 def logout_request(request):
