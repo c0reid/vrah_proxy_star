@@ -7,6 +7,9 @@ from .forms import InputForm
 import logging
 from django.contrib import messages
 
+from django.http import JsonResponse
+from django.contrib.auth.decorators import login_required
+from django.urls import reverse_lazy
 
 from .src.checker import checkPROXY_DB
 """ HELPS
@@ -40,7 +43,8 @@ def upload_csv(request):
     """
     https://pythoncircle.com/post/30/how-to-upload-and-process-the-csv-file-in-django/
     """
-    user = User.objects.get(id=1)
+    print(request.user.id,"\n\n\n")
+    user = User.objects.get(id=request.user.id)
     data = {}
     if "GET" == request.method:
         return render(request, "ProxyChecker/Pchecker.html", data)
@@ -87,7 +91,23 @@ def upload_csv(request):
             logging.getLogger("error_logger").error("Unable to upload file. " + repr(e))
             messages.error(request, "Unable to upload file. " + repr(e))
 
-    checkPROXY_DB()
 
+    def background_process():
+        print("process started")
+        checkPROXY_DB(request)
+        print("process finished")
+
+    #def index(request):
+    #    import threading
+    #    t = threading.Thread(target=background_process, args=(), kwargs={})
+    #    t.setDaemon(True)
+    #    t.start()
+    #    return HttpResponse("main thread content")
+
+
+    import threading
+    t = threading.Thread(target=background_process, args=(), kwargs={})
+    t.setDaemon(True)
+    t.start()
 
     return HttpResponseRedirect(reverse("ProxyChecker:PChecker"))

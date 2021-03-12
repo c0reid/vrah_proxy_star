@@ -11,13 +11,13 @@ test:
 build:
   stage: build
   script:
-  - ls -l
+  - ls
   - echo "Building the app"
-  - docker-compose build
+#  - docker-compose build
 deploy_staiging:
   stage: deploy
   only:
   - master
   script:
   - echo "Deploying the app"
-  - docker-compose up -d
+#  - docker-compose up -d

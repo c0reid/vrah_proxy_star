@@ -62,7 +62,7 @@ class GoodProxy(models.Model):
     ipAdress = models.GenericIPAddressField(default="0.0.0.0")
     port = models.IntegerField(blank=True)
     def __str__(self):
-        return "{1}:{2} {3} {0} {4} {5} {6}".format(self.protokol ,self.ipAdress, self.port, self.email,self.anonymitaetsLevel, self.country, self.latenzself.timestampAdded, self.timestampChecked)
+        return "{1}:{2} {3} {0} {4} {5} {6}".format(self.protokol ,self.ipAdress, self.port, self.email,self.anonymitaetsLevel, self.country, self.latenz, self.timestampAdded, self.timestampChecked)
 
 class BadProxy(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
