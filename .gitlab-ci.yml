@@ -13,11 +13,12 @@ build:
   script:
   - ls -l
   - echo "Building the app"
-  - docker-compose build
+  #- docker-compose build # need to be isntalled or registerd on the runner
 deploy_staiging:
   stage: deploy
   only:
   - master
   script:
   - echo "Deploying the app"
-  - docker-compose up -d
+  # - docker-compose up -d # need to be isntalled or registerd on the runner
+  - docker-compose up --build
