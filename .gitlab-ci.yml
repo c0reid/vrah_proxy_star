@@ -8,7 +8,7 @@ test:
     - echo "Testing the app"
     - echo $CI_JOB_STAGE
     - apk add --no-cache python py2-pip
-    - pip install --no-cache-dir docker-compose
+    - pip3 install --no-cache-dir docker-compose
     - docker-compose -v
 build:
   stage: build
