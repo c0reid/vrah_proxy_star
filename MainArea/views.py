@@ -55,7 +55,11 @@ def UserDashboard(request):
                         ])
         #ip = socket.inet_ntoa(struct.pack('>I', random.randint(1, 0xffffffff)))
         #port = str(defaultPorts[random.randint(0,1)])
-    return render(request,'userDashboard/charts-chartjs.html',{"ipList":proxys})
+    return render(request,'userDashboard/dashboard.html',{"ipList":proxys,
+                                                        'gPcount':goodProxys.count(),
+                                                        'countrys':"45664"
+
+                                                        })
 
 def login_request(request):
     print("rendern! ")

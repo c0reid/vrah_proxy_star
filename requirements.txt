@@ -1,5 +1,6 @@
 asgiref==3.3.1
 Django==3.1.5
+django-crispy-forms==1.11.1
 proxy-checker==0.6
 psycopg2-binary==2.8.6
 pycurl==7.43.0.6

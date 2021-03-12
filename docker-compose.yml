@@ -1,5 +1,5 @@
 version: "3.9"
-   
+
 services:
   db:
     image: postgres
@@ -10,6 +10,8 @@ services:
   web:
     build: .
     command: python manage.py runserver 0.0.0.0:8111
+#    command: python manage.py makemigrations
+#    command: python manage.py migrate
     volumes:
       - .:/code
     ports:
