@@ -51,13 +51,13 @@ def home_page_view(request):
     return render(request,'home.html', {"ipList":proxys})
 #   return HttpResponse('Hello, World!')
 
+
 def UserDashboard(request):
     random.seed()
     goodProxys = GoodProxy.objects.all()
     proxys=[]
     for proxy in goodProxys:
-        proxys.append([
-                        str(random.randint(1,10))+" min",
+        proxys.append([str(random.randint(1,10))+" min",
                         proxy.ipAdress, # ipAdresse
                         str(proxy.port), # port
                         proxy.country,
@@ -65,8 +65,7 @@ def UserDashboard(request):
                         int(proxy.latenz),
                         "online",
                         proxy.protokol,
-                        proxy.anonymitaetsLevel
-                        ])
+                        proxy.anonymitaetsLevel])
         #ip = socket.inet_ntoa(struct.pack('>I', random.randint(1, 0xffffffff)))
         #port = str(defaultPorts[random.randint(0,1)])
     return render(request,'userDashboard/dashboard0.html',{"ipList":proxys,
@@ -74,11 +73,6 @@ def UserDashboard(request):
                                                         'countrys':"45664"})
 
 # https://www.pluralsight.com/guides/work-with-ajax-django
-
-
-
-
-
 def login_request(request):
     print("rendern! ")
     if request.method == 'POST':

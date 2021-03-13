@@ -3,25 +3,28 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from . import models
 from django.contrib.auth.models import User
-from .forms import InputForm
 import logging
 from django.contrib import messages
-
+from django.views.generic.edit import FormView
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse_lazy
 
 from .src.checker import checkPROXY_DB, FarmProxysOS
+from .forms import InputCsvForm, UrlStringFormView
+
+
+
 """ HELPS
 https://www.techiediaries.com/resetting-django-migrations/
 """
 
 def ProxyChecker(request):
     if request.method == 'GET':
-        form = InputForm()
+        form = InputCsvForm()
     else:
         # A POST request: Handle Form Upload
-        form = InputForm(request.POST)  # Bind data from request.POST into a PostForm
+        form = InputCsvForm(request.POST)  # Bind data from request.POST into a PostForm
         # If data is valid, proceeds to create a new post and redirect the user
         if form.is_valid():
             # FileUpload = forms.FileUpload()
@@ -34,12 +37,35 @@ def ProxyChecker(request):
             # return HttpResponseRedirect(reverse('post_detail',kwargs={'post_id': post.id}))
 
     form = {}
-    form['form'] = InputForm()
+    form['form'] = InputCsvForm()
     return render(request, "ProxyChecker/Pchecker.html", form)
 
 
-def upload_csv(request):
 
+class URL_String_Upload(FormView):
+    template_name = 'userDashboard/Dashboard.html'
+    form_class = UrlStringFormView
+
+    def form_valid(self, form):
+        """
+        If the form is valid return HTTP 200 status
+        code along with name of the user
+        """
+        name = form.cleaned_data['name']
+        form.save()
+        return JsonResponse({"name": name}, status=200)
+
+    def form_invalid(self, form):
+        """
+        If the form is invalid return status 400
+        with the errors.
+        """
+        errors = form.errors.as_json()
+        return JsonResponse({"errors": errors}, status=400)
+
+
+
+def upload_csv(request):
     """
     https://pythoncircle.com/post/30/how-to-upload-and-process-the-csv-file-in-django/
     """
@@ -116,3 +142,18 @@ def upload_csv(request):
 
 
     return HttpResponseRedirect(reverse("main:dashboard"))
+
+
+
+from ProxyChecker.src.checker import checkPROXY_DB
+def background_process():
+    print("\033[1;34m"+"process started")
+    checkPROXY_DB(request)
+    #FarmProxysOS()
+    print("\033[1;34m"+"process finished")
+
+
+import threading
+t = threading.Thread(target=background_process, args=(), kwargs={})
+t.setDaemon(True)
+t.start()
