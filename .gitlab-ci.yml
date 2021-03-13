@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 stages:
   - test
   - build
@@ -21,3 +22,34 @@ deploy_staiging:
   script:
   - echo "Deploying the app"
 #  - docker-compose up -d
+=======
+stages:
+  - test
+  - build
+  - deploy
+test:
+  stage: test
+  script:
+    - echo "Testing the app"
+    - echo $CI_JOB_STAGE
+ #   - pip install curl
+#    - curl -fsSL https://get.docker.com -o get-docker.sh
+#    - apk add --no-cache python py2-pip
+#    - pip install --no-cache-dir docker-compose
+   # - pip install docker-compose
+   # - docker-compose -v
+build:
+  stage: build
+  script:
+  - ls -l
+  - echo "Building the app"
+  #- docker-compose build # need to be isntalled or registerd on the runner
+deploy_staiging:
+  stage: deploy
+  only:
+  - master
+  script:
+  - echo "Deploying the app"
+  # - docker-compose up -d # need to be isntalled or registerd on the runner
+ # - docker-compose up --build
+>>>>>>> 65bbe0b9cbd9e4e0c4a9ae1c333b297f5bbd68b7
