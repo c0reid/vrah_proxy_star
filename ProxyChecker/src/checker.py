@@ -1,17 +1,10 @@
-
-
-#import gevent
-#from gevent import monkey
-#monkey.patch_all()
-
-#from getproxy import GetProxy
-#g = GetProxy()
 from proxy_checker import ProxyChecker
 from ProxyChecker.models import UserProxy, LoadedPrxy, GoodProxy, BadProxy
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Count, Max
 from django.utils import timezone
 from django.contrib.auth.models import User
+from ProxyChecker.src.urlfarmer import urlfarmer
 
 
 #Colours
@@ -21,7 +14,27 @@ yellow="\033[1;33m"
 blue="\033[1;34m"
 defcol = "\033[0m"
 
+
+from background_task import background
+
+
+# https://django-background-tasks.readthedocs.io/en/latest/
+# notify_user(user.id, schedule=90) # 90 seconds from now
+# notify_user(user.id, schedule=timedelta(minutes=20)) # 20 minutes from now
+# notify_user(user.id, schedule=timezone.now()) # at a specific time
+
+
+@background(schedule=10, queue='Proxy-valid')
+def notify_user():
+    # lookup user by id and send them a message
+    #user = User.objects.get(pk=user_id)
+    print("Bachground task from django with schedule")
+    #user.email_user('Here is a notification', 'You have been notified')
+
+
+
 def getDBProxys(request_userid):
+    notify_user()
     dbProxys = UserProxy.objects.all().filter(user=request_userid.user.id)
     testProxy = []
     for i in dbProxys:
@@ -35,6 +48,7 @@ def LoadProxys():
     pass
 
 def CleanUpMainProxyDatabase(Request):
+    # urlfarmer.FarmProxys()
     unique_fields = ['ipAdress', 'port']
     print(UserProxy.objects.values(*unique_fields).count())
     duplicates = (
@@ -54,7 +68,20 @@ def CleanUpMainProxyDatabase(Request):
     print(UserProxy.objects.values(*unique_fields).count())
     print("\033[1;32mMainDatabase von Duplikaten befreit")
 
+def FarmProxysOS():
+    import proxyscrape
+    from proxyscrape import create_collector, get_collector
+    print("Starting scraping")
+#    collector = create_collector('my-collector', ['socks4', 'socks5'])
+    collector = proxyscrape.create_collector('my-collector', 'http')  # Create a collector for http resources
+    proxies = collector.get_proxies()
+    print("Stoping scraping")
+    for i in proxies:
+        print(i)
+
 def checkPROXY_DB(Request):
+    ###################
+    #######################
     userid = Request.user.id
     CleanUpMainProxyDatabase(Request)
     print("Userid:", userid)
@@ -72,7 +99,7 @@ def checkPROXY_DB(Request):
         badProxyCount=BadProxy.objects.filter(ipAdress=i.ipAdress,port=i.port).count()
         goodProxyCount=GoodProxy.objects.filter(ipAdress=i.ipAdress,port=i.port).count()
         print(badProxyCount,goodProxyCount)
-        if badProxyCount + goodProxyCount == 0:
+        if badProxyCount == 0 and goodProxyCount == 0:
             print(defcol+"Proxy not in Bad and Good -Proxylist\nChecking Proxy:", str(i.id), i.ipAdress+":"+str(i.port))
             tesstproxy=checker.check_proxy(i.ipAdress+":"+str(i.port))
             if tesstproxy == False:

@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'MainArea',
     'ProxyChecker',
     'crispy_forms', # pip install django-crispy-forms
+    'background_task',
 ]
 
 MIDDLEWARE = [
@@ -142,8 +143,8 @@ MEDIA_URL = '/images/'
 #--------------------------------------------------
 STATIC_ROOT = os.path.join(BASE_DIR, 'root')
 #-----------------------------------------------------
-print(BASE_DIR)
-print((BASE_DIR, 'static'))
+#print(BASE_DIR)
+#print((BASE_DIR, 'static'))
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 STATICFILES_DIRS = [
         os.path.join(BASE_DIR, 'static')

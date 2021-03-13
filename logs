@@ -1,28 +1,27 @@
 
 Let's test if everything works until now. Run the following command.
 
-$ docker-compose up --build
-
+# docker-compose up --build
 
 
 docker exec -t -i <DockerContainer-ID> bash
-# Im DockerContainer:
+docker exec -t -i vrahproxystardjango_web_1 bash python
+python manage.py makemigrations && python manage.py migrate
 
-python manage.py makemigrations
-python manage.py migrate
+
+# Im DockerContainer:
+python manage.py makemigrations && python manage.py migrate
 python manage.py createsuperuser
+
 
 # starte DockerContainer
 -  docker-compose up
 
 docker exec -t -i vrahproxystardjango_web_1 bash python
 
+python -m pip freeze requirements.txt
+
+
+
 # Debugger with python in the background
 - python manage.py runserver 0.0.0.0:8889
-
-
-
-
-
-
-added GoodProxys, BadProxys, LoadedProxys and PorxyContainer -models to Proxychecker; Proxychecker is only ckecking when the proxy is not in BadProxys and GoodProxy, DB-commits working, homeSection is showing only working Proxys now"

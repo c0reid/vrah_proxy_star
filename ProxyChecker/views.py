@@ -11,7 +11,7 @@ from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse_lazy
 
-from .src.checker import checkPROXY_DB
+from .src.checker import checkPROXY_DB, FarmProxysOS
 """ HELPS
 https://www.techiediaries.com/resetting-django-migrations/
 """
@@ -93,9 +93,10 @@ def upload_csv(request):
 
 
     def background_process():
-        print("process started")
+        print("\033[1;34m"+"process started")
         checkPROXY_DB(request)
-        print("process finished")
+        #FarmProxysOS()
+        print("\033[1;34m"+"process finished")
 
     #def index(request):
     #    import threading
@@ -109,5 +110,9 @@ def upload_csv(request):
     t = threading.Thread(target=background_process, args=(), kwargs={})
     t.setDaemon(True)
     t.start()
+    #p = threading.Thread(target=FarmProxysOS, args=(), kwargs={})
+    #p.setDaemon(True)
+    #p.start()
 
-    return HttpResponseRedirect(reverse("ProxyChecker:PChecker"))
+
+    return HttpResponseRedirect(reverse("main:dashboard"))
