@@ -82,14 +82,13 @@ class BadProxy(models.Model):
         return "{1}:{2} {3} {0} {4} {5} {6}".format(self.protokol ,self.ipAdress, self.port, self.email,self.anonymitaetsLevel, self.country, self.latenz)
 
 class ProxyStringUrl(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    urlstring =models.URLField(verbose_name="Proxy-URLs",default="")
-    site = models.CharField(max_length=16, blank=True)
-    timestampAdded = models.DateTimeField(default=timezone.now)
-    timestampChecked = models.DateTimeField(null=True)
-
+#    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    urlstring =models.URLField(verbose_name="URL",default="")
+#    site = models.CharField(max_length=200, blank=True, default="")
+    timestampAdded = models.DateTimeField(auto_now=timezone.now)
+#    timestampChecked = models.DateTimeField(default="")
     def __str__(self):
-        return self.urlstring, self.user
+        return "{0} {1}".format(str(self.urlstring))
 
 
 

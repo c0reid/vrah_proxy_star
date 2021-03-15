@@ -18,9 +18,6 @@ class NewUserForm(UserCreationForm):
             user.save()
         return user
 
-
-
-
 class ContactForm(forms.ModelForm):
     class Meta:
         model = Contact

@@ -11,17 +11,35 @@ python manage.py makemigrations && python manage.py migrate
 
 # Im DockerContainer:
 python manage.py makemigrations && python manage.py migrate
-python manage.py createsuperuser
+python ./manage.py createsuperuser \
+   --username admin \
+   --email admin@example.com \
+   --noinput
 
 
 # starte DockerContainer
 -  docker-compose up
 
 docker exec -t -i vrahproxystardjango_web_1 bash python
-
 python -m pip freeze requirements.txt
-
 
 
 # Debugger with python in the background
 - python manage.py runserver 0.0.0.0:8889
+
+
+This will drop all tables from your_app
+- python manage.py migrate your_app zero
+
+Deleting migration files
+Start by deleting each migration file inside your project apps except for the Python module file init.py
+You can use a bash script in Unix based operating systems to do this quickly:
+
+find . -path "*/migrations/*.py" -not -name "__init__.py" -delete
+find . -path "*/migrations/*.pyc"  -delete
+
+
+./manage.py createsuperuser \
+   --username admin \
+   --email admin@example.com \
+   --noinput

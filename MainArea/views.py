@@ -1,28 +1,30 @@
-from django.shortcuts import render, redirect
-from django.http import HttpResponse
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth import logout, authenticate, login
-from django.contrib import messages
 from django.contrib.auth.models import User
-from django.contrib.auth.decorators import login_required
-from django.http import JsonResponse
-from django.views.generic.edit import CreateView
+
+
+from django.shortcuts import render, redirect
+from django.http import HttpResponse
 from django.urls import reverse, reverse_lazy
+from django.views.generic.edit import FormView, CreateView
 from django.http import JsonResponse
-from .forms import ContactForm
 
-from .forms import NewUserForm
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 
-from ProxyChecker.models import GoodProxy
+from .forms import ContactForm, NewUserForm
+from ProxyChecker.forms import UrlStringFormView
+# Forms Collection
+
+
+# import der App aus dem ProxyChecker
+from ProxyChecker.models import GoodProxy , ProxyStringUrl
+# import der App aus dem ProxyChecker
 
 import datetime
 import random
 import socket
 import struct
-
-
-
-from django.views.generic.edit import FormView
 
 
 def home_page_view(request):
@@ -52,25 +54,52 @@ def home_page_view(request):
 #   return HttpResponse('Hello, World!')
 
 
+
+def like_button(request):
+   ctx={"hello":"hello"}
+   return render(request,"like/like_template.html",ctx)
+
+
 def UserDashboard(request):
     random.seed()
     goodProxys = GoodProxy.objects.all()
+    for i in goodProxys:
+        print(i)
     proxys=[]
-    for proxy in goodProxys:
-        proxys.append([str(random.randint(1,10))+" min",
-                        proxy.ipAdress, # ipAdresse
-                        str(proxy.port), # port
-                        proxy.country,
-                        str(random.randint(40,100)),
-                        int(proxy.latenz),
-                        "online",
-                        proxy.protokol,
-                        proxy.anonymitaetsLevel])
-        #ip = socket.inet_ntoa(struct.pack('>I', random.randint(1, 0xffffffff)))
-        #port = str(defaultPorts[random.randint(0,1)])
+    url_cForm = UrlStringFormView()
+    print("Count",len(goodProxys))
+    try:
+        for proxy in goodProxys:
+            proxys.append([str(random.randint(1,10))+" min",
+                            proxy.ipAdress, # ipAdresse
+                            str(proxy.port), # port
+                            proxy.country,
+                            str(random.randint(40,100)),
+                            int(proxy.latenz),
+                            "online",
+                            proxy.protokol,
+                            proxy.anonymitaetsLevel])
+    except Exception as e:
+        print(e)
+        pass
+
+    # Bereich um URLs in der DB zu speichern und ggf. zu chekchen Ajax Post-call
+    if request.method == "POST" and request.is_ajax():
+        form = UrlStringFormView(request.POST)
+        if form.is_valid():
+            user = request.user.id
+            urlstring = form.cleaned_data['urlstring']
+            form.save()
+            return JsonResponse({"urlstring": urlstring}, status=200)
+        else:
+            errors = form.errors.as_json()
+            return JsonResponse({"errors": errors}, status=400)
+
     return render(request,'userDashboard/dashboard0.html',{"ipList":proxys,
                                                         'gPcount':goodProxys.count(),
-                                                        'countrys':"45664"})
+                                                        'countrys':"45664",
+                                                        'save_url': url_cForm,
+                                                        })
 
 # https://www.pluralsight.com/guides/work-with-ajax-django
 def login_request(request):
@@ -96,6 +125,8 @@ def login_request(request):
     return render(request = request,
                     template_name = "authTemplates/login3.html",
                     context={"form":form})
+
+
 
 def logout_request(request):
     logout(request)
@@ -181,13 +212,6 @@ class ContactFormView(FormView):
         errors = form.errors.as_json()
         return JsonResponse({"errors": errors}, status=400)
 
-
-
-@login_required
-def home(request):
-    return render(request, 'home.html')
-
-
 class SignUpView(CreateView):
     template_name = 'authTemplates/signup.html'
     form_class = UserCreationForm
@@ -197,12 +221,3 @@ class SignUpView(CreateView):
         valid = super().form_valid(form)
         login(self.request, self.object)
         return valid
-
-
-def validate_username(request):
-    """Check username availability"""
-    username = request.GET.get('username', None)
-    response = {
-        'is_taken': User.objects.filter(username__iexact=username).exists()
-    }
-    return JsonResponse(response)

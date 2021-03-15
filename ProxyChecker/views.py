@@ -108,22 +108,16 @@ def upload_csv(request):
                     #    logging.getLogger("error_logger").error(form.errors.as_json())
                 except Exception as e:
                     logging.getLogger("error_logger").error(repr(e))
-
                     pass
-
-
-
     except Exception as e:
             logging.getLogger("error_logger").error("Unable to upload file. " + repr(e))
             messages.error(request, "Unable to upload file. " + repr(e))
-
 
     def background_process():
         print("\033[1;34m"+"process started")
         checkPROXY_DB(request)
         #FarmProxysOS()
         print("\033[1;34m"+"process finished")
-
     #def index(request):
     #    import threading
     #    t = threading.Thread(target=background_process, args=(), kwargs={})
@@ -131,29 +125,22 @@ def upload_csv(request):
     #    t.start()
     #    return HttpResponse("main thread content")
 
-
     import threading
     t = threading.Thread(target=background_process, args=(), kwargs={})
     t.setDaemon(True)
     t.start()
-    #p = threading.Thread(target=FarmProxysOS, args=(), kwargs={})
-    #p.setDaemon(True)
-    #p.start()
-
 
     return HttpResponseRedirect(reverse("main:dashboard"))
 
-
-
-from ProxyChecker.src.checker import checkPROXY_DB
-def background_process():
-    print("\033[1;34m"+"process started")
-    checkPROXY_DB(request)
-    #FarmProxysOS()
-    print("\033[1;34m"+"process finished")
-
-
-import threading
-t = threading.Thread(target=background_process, args=(), kwargs={})
-t.setDaemon(True)
-t.start()
+def ajax_view(request):
+    if request.method == "POST":
+        print(request.POST)
+        data = {
+            "msg": "Data has been POSTED!",
+        }
+        return JsonResponse(data)
+    else:
+        data = {
+            "msg": "It worked!!",
+        }
+        return JsonResponse(data)

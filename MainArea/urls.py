@@ -13,6 +13,7 @@ app_name = 'main'
 urlpatterns = [
     path('dashboard/', views.home_page_view, name='home'),
     path("", views.UserDashboard, name="dashboard"),
+    path('save_url/', views.UserDashboard, name='save_url'),
     path("register/", views.register, name="register"),
     path("logout", views.logout_request, name="logout"),
     path("login", views.login_request, name="login"),

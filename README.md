@@ -1,6 +1,6 @@
 <h1 align="center">
 	<br>
-	<img src="https://i.ibb.co/w7jx8Yg/Vrah-Proxy-Star.png" alt="Vrah-Proxy-Star">
+	<img src="2Vrah-Proxy-Star.png" alt="Vrah-Proxy-Star">
 </h1>
 <h4 align="center">Advanced Proxy Scraper</h4>
 <p align="center">

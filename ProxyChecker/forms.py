@@ -10,4 +10,5 @@ class InputCsvForm(forms.Form):
 class UrlStringFormView(forms.ModelForm):
     class Meta:
         model = ProxyStringUrl
-        fields = '__all__'
+        #fields = '__all__'
+        fields = ['urlstring']

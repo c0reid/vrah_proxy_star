@@ -19,5 +19,5 @@ from django.urls import path, include
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('MainArea.urls')), #
-    path('checker', include('ProxyChecker.urls')), # new
+    path('', include('ProxyChecker.urls')), # new
 ]
