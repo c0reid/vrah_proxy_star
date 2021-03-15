@@ -1,13 +1,61 @@
-{% extends 'base/header.html' %}
 
-{% block content %}
-    <br>
-    <form method="POST">
-        {% csrf_token %}
-        {{form.as_p}}
-        <button style="background-color:#F4EB16; color:blue" class="btn btn-outline-info" type="submit">Sign Up</button>
-    </form>
+{% load crispy_forms_tags %}
+<!DOCTYPE html>
+<html lang="en">
 
-    If you already have an account <a href="/login" target="blank"><strong>login</strong></a> instead.
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+        integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+</head>
 
-{% endblock %}
+<body>
+    <div id="signupForm" class="container mt-5 w-50">
+      <form method="POST" enctype="multipart/form-data">
+          {% csrf_token %}
+          {{user_form |crispy}}
+          {{profile_form|crispy}}
+          <button class="btn btn-success btn-lg" name="signupSubmit" type="submit">Sign Up</button>
+      </form>
+    </div>
+
+    {% block javascript %}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            // catch the form's submit event
+            $('#id_username').keyup(function () {
+                // create an AJAX call
+                $.ajax({
+                    data: $(this).serialize(), // get the form data
+                    url: "{% url 'main:validate_username' %}",
+                    // on success
+                    success: function (response) {
+                        if (response.is_taken == true) {
+                            $('#id_username').removeClass('is-valid').addClass('is-invalid');
+                            $('#id_username').after('<div class="invalid-feedback d-block" id="usernameError">This username is not available!</div>')
+                        }
+                        else {
+                            $('#id_username').removeClass('is-invalid').addClass('is-valid');
+                            $('#usernameError').remove();
+
+                        }
+
+                    },
+                    // on error
+                    error: function (response) {
+                        // alert the error if any error occured
+                        console.log(response.responseJSON.errors)
+                    }
+                });
+
+                return false;
+            });
+        })
+    </script>
+    {% endblock javascript %}
+</body>
+
+</html>

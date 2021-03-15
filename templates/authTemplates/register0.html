@@ -11,7 +11,7 @@
 
 <body>
     <div class="container mt-5 w-50">
-        <form id="signupForm" method="POST">
+        <form id="signupForm" method="POST" enctype="multipart/form-data">
             {% csrf_token %}
             {{ form|crispy  }}
             <input type="submit" name="signupSubmit" class="btn btn-success btn-lg" />

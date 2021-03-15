@@ -112,13 +112,13 @@
                   </div>
                   <div class="widget-subheading">
                     {% if user.is_authenticated %}
-                    Hi {{ user.username }}!
+                    Welcome {{ user.username }}!,
+                    <a href="{% url 'main:logout' %}">Logout</a>
                     {% else %}
-                    <a href="{% url 'main:login' %}">Login</a> or
+                    <a href="{% url 'main:login' %}">Login</a>
+                    or
                     <a href="{% url 'main:signup' %}">register</a>
                     {% endif %}
-
-                    <a href="#">Login or register</a>
                   </div>
                 </div>
                 <div class="widget-content-right header-user-info ml-3">
@@ -454,8 +454,12 @@
                   {% if user.is_authenticated %}
                   {{ user.username }}
                   {% else %}
-                  Login or register
+
+                  Anonymous
                   {% endif %}
+
+
+
                 </a>
               </li>
               <li class="app-sidebar__heading">Proxy Collector</li>
@@ -614,7 +618,8 @@
               <li>
                 <a href="forms-layouts.html">
                   <i class="metismenu-icon pe-7s-eyedropper">
-                  </i>Forms Layouts
+                  </i>
+                  s Layouts
                 </a>
               </li>
               <li>
@@ -648,18 +653,8 @@
             <div class="page-title-wrapper">
               <div class="page-title-heading">
                 <div class="page-title-icon">
-                  <style>
-                    .mein_Icon {
-                      background-image:url("{% static 'favicon.ico' %}");
-                    }
-                  </style>
-
-                  <div class="mein_Icon">
-
-                  </div>
-                  <!--i class="pe-7s-car icon-gradient bg-mean-fruit">
-
-                                        </i-->
+                    <i class="pe-7s-car icon-gradient bg-mean-fruit">
+                    </i>
                 </div>
                 <div>Vrah Proxy-Star
                   <div class="page-title-subheading">Have fun with your own proxyscraper and Checker
@@ -810,12 +805,12 @@
                         <th class="text-center">Updated(min)</th>
                         <th class="text-center">IP Adress</th>
                         <th class="text-center">Port</th>
-                        <th class="text-center">Geschwindigkeit<br></th>
-                        <th class="text-center">Status</th>
-                        <th class="text-center">Latenz(ms)</th>
+                        <th class="text-center">Location</th>
+                        <th class="text-center">Speed<br></th>
+                        <th class="text-center">Latency(ms)</th>
                         <th class="text-center">Online</th>
-                        <th class="text-center">Protokoll</th>
-                        <th class="text-center">Anonymität</th>
+                        <th class="text-center">Protocol</th>
+                        <th class="text-center">Anonymity</th>
                         <th class="text-center">Info</th>
                       </tr>
                     </thead>
@@ -1323,16 +1318,13 @@
               </div>
             </div>
           </div>
-
-
-
         <div class="row"> <!-- die tool row : zuletzt 3 cards -->
           <div class="col-md-6 col-xl-4"> <!-- card nr:1 -->
             <div class="card mb-3 widget-content">
               <div class="widget-content-outer">
                 <div class="widget-content-wrapper">
                   <div class="widget-content-left">
-                    <div class="widget-heading">Upload Csv-file</div>
+                    <div class="widget-heading">Csv-File</div>
                     <form action="{% url "ProxyChecker:upload_csv" %}" method="POST" enctype="multipart/form-data" class="form-horizontal">
                       {% csrf_token %}
                       <div class="form-group">
@@ -1343,13 +1335,9 @@
                         </div>
                       </div>
                       <div class="form-group form-horizontal">
-                        <div class="col-md-3 col-sm-3 col-xs-12 col-md-offset-3" style="margin-bottom:10px;">
-                          <button class="btn btn-primary"> <span class="glyphicon glyphicon-upload" style="margin-right:5px;"></span>Upload </button>
-
-                        </div>
+                          <button class="btn btn-success btn-lg"> <span class=""></span>Upload</button>
                       </div>
                     </form>
-
                     <div class="widget-numbers text-success widget-content-right">{{gPcount}} Servers</div>
                   </div>
                 </div>
@@ -1368,6 +1356,14 @@
                           {{ save_url|crispy  }}
                           <input type="submit" name="contact-submit" class="btn btn-success btn-lg" />
                   </div>
+                  <div class="widget-content-right">
+                    <div class="widget-heading">
+
+
+
+
+                      </div>
+                  </div>
                   </div>
                   <div class="widget-content-right">
                     <div class="widget-numbers text-warning">3.3k Countrys</div>
@@ -1381,15 +1377,44 @@
               <div class="widget-content-outer">
                 <div class="widget-content-wrapper">
                   <div class="widget-content-left">
-                    <div class="widget-heading">Own Database</div>
-                    <div class="widget-subheading text-danger">Database-consistency</div>
-                    <button class="btn btn-primary" id="start-worker"> <span class="glyphicon glyphicon-upload" style="margin-right:5px;"></span>Start Worker</button>
+
 
                   </div>
-                  <div class="widget-content-right">
-                    <div class="widget-numbers text-danger ">45,9%</div>
+
+                    <div class="table-responsive">
+                      <table class="align-middle mb-0 table table-borderless table-striped table-hover">
+                        <thead>
+                          <tr class="text-center">
+                            <th class="text-center">URL-String's</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+
+
+
+
+                          {% for project in url_strings  %}
+                          <tr class="text-center">
+                            <th>{{ project.urlstring }}</th>
+                          </tr>
+                          {% endfor %}
+
+                        </tbody>
+                      </table>
                   </div>
-                </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
               </div>
             </div>
           </div>
@@ -1476,7 +1501,7 @@
                       url: "{% url 'main:dashboard' %}",
                       // on success
                       success: function (response) {
-                          alert("Thankyou for reaching us out " + response.name);
+                          alert("URL-String saved " + response.name);
                       },
                       // on error
                       error: function (response) {

@@ -12,10 +12,9 @@ from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 
-from .forms import ContactForm, NewUserForm
+from .forms import ContactForm, NewUserForm, UserProfileInfoForm
 from ProxyChecker.forms import UrlStringFormView
 # Forms Collection
-
 
 # import der App aus dem ProxyChecker
 from ProxyChecker.models import GoodProxy , ProxyStringUrl
@@ -61,6 +60,11 @@ def like_button(request):
 
 
 def UserDashboard(request):
+    url_strings = ProxyStringUrl.objects.all()
+    def get_queryset(self):
+        print("Proxystring abfrage!")
+        return self.model
+
     random.seed()
     goodProxys = GoodProxy.objects.all()
     for i in goodProxys:
@@ -99,6 +103,7 @@ def UserDashboard(request):
                                                         'gPcount':goodProxys.count(),
                                                         'countrys':"45664",
                                                         'save_url': url_cForm,
+                                                        'url_strings':url_strings
                                                         })
 
 # https://www.pluralsight.com/guides/work-with-ajax-django
@@ -126,8 +131,6 @@ def login_request(request):
                     template_name = "authTemplates/login3.html",
                     context={"form":form})
 
-
-
 def logout_request(request):
     logout(request)
     messages.info(request, "Logged out successfully!")
@@ -147,26 +150,48 @@ def ajax_view(request):
         return JsonResponse(data)
 
 def register(request):
+    saved = False
+    # https://medium.com/@himanshuxd/how-to-create-registration-login-webapp-with-django-2-0-fd33dc7a6c67
+
     if request.method == "POST":
-        form = UserCreationForm(request.POST)
-        if form.is_valid():
-            user = form.save()
-            username = form.cleaned_data.get('username')
+        user_form = UserCreationForm(request.POST)
+        profile_form = UserProfileInfoForm(request.POST,request.FILES)
+        if user_form.is_valid():
+            user = user_form.save()
+            username = user_form.cleaned_data.get('username')
+            profile = profile_form.save(commit=False)
+            for i in request.POST:
+                print(i)
+            for i in profile_form:
+                print(i)
+            if profile_form.is_valid():
+
+                profile.user = user
+                # profile.profile_pic = request.FILES['profile_pic']
+                profile.profile_pic = profile_form.cleaned_data["profile_pic"]
+                for i in request.FILES:
+                    print(i)
+                if 'profile_pic' in request.FILES:
+                    print('found it')
+                    profile.profile_pic = request.FILES['profile_pic']
+                else:
+                    print("ProfilePic not founded!")
+
+                print("Profile wird saved")
+                profile.save()
+                saved = True
             login(request, user)
+
             return redirect("main:login")
-
         else:
-            for msg in form.error_messages:
-                print(form.error_messages[msg])
+            print(user_form.errors,profile_form.errors)
 
-            return render(request = request,
-                          template_name = "authTemplates/register.html",
-                          context={"form":form})
-
-    form = UserCreationForm
+    user_form = UserCreationForm
+    profile_form = UserProfileInfoForm()
     return render(request = request,
                   template_name = "authTemplates/register.html",
-                  context={"form":form})
+                  context={"user_form":user_form,
+                  'profile_form':profile_form,})
 
 
 def validate_username(request):

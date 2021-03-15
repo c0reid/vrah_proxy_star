@@ -1,5 +1,5 @@
 # pages/urls.py
-from django.urls import path , include
+from django.urls import path , include, re_path
 from MainArea import views
 #from django.contrib.staticfiles.storage import staticfiles_storage
 from django.views.generic.base import RedirectView
