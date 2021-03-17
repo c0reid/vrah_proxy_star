@@ -6,7 +6,9 @@
  __pycache__
  db.sqlite3
  media
-
+ /media
+ /profile_pics/*
+/jmDocs
  # Backup files #
  *.bak
 
@@ -24,6 +26,8 @@
  .idea/**/gradle.xml
  .idea/**/libraries
  *.iws /out/
+
+
 
  # Python #
  *.py[cod]
