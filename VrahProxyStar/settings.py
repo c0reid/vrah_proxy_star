@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'ProxyChecker',
     'crispy_forms', # pip install django-crispy-forms
     'background_task',
+    'django_filters', # pip install django-filter
 ]
 
 MIDDLEWARE = [

@@ -82,55 +82,122 @@ def FarmProxysOS():
 def checkPROXY_DB(Request):
     ###################
     #######################
-    userid = Request.user.id
-    CleanUpMainProxyDatabase(Request)
-    print("Userid:", userid)
-    user = User.objects.get(id=userid)
-    dbProxys = UserProxy.objects.all().filter(user=user)
-    badProxy = BadProxy.objects.all().filter(user=user)
-    goodProxys = GoodProxy.objects.all().filter(user=user)
-    #testProxy = []
-    checker = ProxyChecker()
-    for i in dbProxys:
-        # ProxyId ran holen
-        proxy = dbProxys.get(id=i.id)
-        print(proxy)
-        # ist der Proxy in der BadProxy List =
-        badProxyCount=BadProxy.objects.filter(ipAdress=i.ipAdress,port=i.port).count()
-        goodProxyCount=GoodProxy.objects.filter(ipAdress=i.ipAdress,port=i.port).count()
-        print(badProxyCount,goodProxyCount)
-        if badProxyCount == 0 and goodProxyCount == 0:
-            print(defcol+"Proxy not in Bad and Good -Proxylist\nChecking Proxy:", str(i.id), i.ipAdress+":"+str(i.port))
-            tesstproxy=checker.check_proxy(i.ipAdress+":"+str(i.port))
-            if tesstproxy == False:
-                try:
-                    newbadProxy = badProxy.create(user_id=userid,
-                                                    ipAdress=i.ipAdress,
-                                                    port=i.port)
-                    newbadProxy.save()
-                    print(red+"Bad ProxyId:{}:added to BadProxys".format(i.id))
-
-                    #Aktualsiere Badproxys
-                    badProxy = BadProxy.objects.all().filter(user=userid)
-                except ObjectDoesNotExist as DoesNotExist:
-                    print(red+"Fehler!!! ObjectDoesNotExist ")
-            else:
-                try:
-                    if goodProxyCount == 0:
-                        newgoodProxy = goodProxys.create(user_id=userid,
+    if Request.user.is_anonymous:
+        userid = 1
+        CleanUpMainProxyDatabase(Request)
+        print("Userid:", userid)
+        user = User.objects.get(id=userid)
+        dbProxys = UserProxy.objects.all().filter(user=user)
+        badProxy = BadProxy.objects.all().filter(user=user)
+        goodProxys = GoodProxy.objects.all().filter(user=user)
+        #testProxy = []
+        checker = ProxyChecker()
+        for i in dbProxys:
+            # ProxyId ran holen
+            proxy = dbProxys.get(id=i.id)
+            print(proxy)
+            # ist der Proxy in der BadProxy List =
+            badProxyCount=BadProxy.objects.filter(ipAdress=i.ipAdress,port=i.port).count()
+            goodProxyCount=GoodProxy.objects.filter(ipAdress=i.ipAdress,port=i.port).count()
+            print(badProxyCount,goodProxyCount)
+            if badProxyCount == 0 and goodProxyCount == 0:
+                print(defcol+"Proxy not in Bad and Good -Proxylist\nChecking Proxy:", str(i.id), i.ipAdress+":"+str(i.port))
+                tesstproxy=checker.check_proxy(i.ipAdress+":"+str(i.port))
+                if tesstproxy == False:
+                    try:
+                        newbadProxy = badProxy.create(user_id=userid,
                                                         ipAdress=i.ipAdress,
-                                                        port=i.port,
-                                                        protokol = tesstproxy['protocols'][0],
-                                                        anonymitaetsLevel=tesstproxy["anonymity"],
-                                                        latenz=tesstproxy["timeout"],
-                                                        countryCode=tesstproxy["country_code"],
-                                                        country=tesstproxy["country"],
-                                                        )
-                        newgoodProxy.save()
-                        print(green+"Proxy mit der ID:",i.id,"wurde Validiert und zu GoodProxys hinzugefügt!!")
+                                                        port=i.port)
+                        newbadProxy.save()
+                        print(red+"Bad ProxyId:{}:added to BadProxys".format(i.id))
 
-                except ObjectDoesNotExist as DoesNotExist:
-                    print("Fehler!!! ObjectDoesNotExist")
-        else:
-            print("Ist in der GoodProxy or BadProxy -list!")
-    print("alle Proxys wurden getestet!!!")
+                        #Aktualsiere Badproxys
+                        badProxy = BadProxy.objects.all().filter(user=userid)
+                    except ObjectDoesNotExist as DoesNotExist:
+                        print(red+"Fehler!!! ObjectDoesNotExist ")
+                else:
+                    try:
+                        if goodProxyCount == 0:
+                            newgoodProxy = goodProxys.create(user_id=userid,
+                                                            ipAdress=i.ipAdress,
+                                                            port=i.port,
+                                                            protokol = tesstproxy['protocols'][0],
+                                                            anonymitaetsLevel=tesstproxy["anonymity"],
+                                                            latenz=tesstproxy["timeout"],
+                                                            countryCode=tesstproxy["country_code"],
+                                                            country=tesstproxy["country"],
+                                                            )
+                            newgoodProxy.save()
+                            print(green+"Proxy mit der ID:",i.id,"wurde Validiert und zu GoodProxys hinzugefügt!!")
+
+                    except ObjectDoesNotExist as DoesNotExist:
+                        print("Fehler!!! ObjectDoesNotExist")
+            else:
+                print("Ist in der GoodProxy or BadProxy -list!")
+        print("alle Proxys wurden getestet!!!")
+
+    else:
+        text = f"""
+        Some attributes of the HttpRequest object:
+
+        scheme: {Request.scheme}
+        path:   {Request.path}
+        method: {Request.method}
+        GET:    {Request.GET}
+        user:   {Request.user}
+        """
+        print(text)
+        userid = int(Request.user.id)
+        CleanUpMainProxyDatabase(Request)
+        print("Userid:", userid)
+        user = User.objects.get(id=userid)
+        dbProxys = UserProxy.objects.all().filter(user=user)
+        badProxy = BadProxy.objects.all().filter(user=user)
+        goodProxys = GoodProxy.objects.all().filter(user=user)
+        #testProxy = []
+        checker = ProxyChecker()
+        for i in dbProxys:
+            # ProxyId ran holen
+            proxy = dbProxys.get(id=i.id)
+            print(proxy)
+            # ist der Proxy in der BadProxy List =
+            badProxyCount=BadProxy.objects.filter(ipAdress=i.ipAdress,port=i.port).count()
+            goodProxyCount=GoodProxy.objects.filter(ipAdress=i.ipAdress,port=i.port).count()
+            print(badProxyCount,goodProxyCount)
+            if badProxyCount == 0 and goodProxyCount == 0:
+                print(defcol+"Proxy not in Bad and Good -Proxylist\nChecking Proxy:", str(i.id), i.ipAdress+":"+str(i.port))
+                tesstproxy=checker.check_proxy(i.ipAdress+":"+str(i.port))
+                if tesstproxy == False:
+                    try:
+                        newbadProxy = badProxy.create(user_id=userid,
+                                                        ipAdress=i.ipAdress,
+                                                        port=i.port)
+                        newbadProxy.save()
+                        print(red+"Bad ProxyId:{}:added to BadProxys".format(i.id))
+
+                        #Aktualsiere Badproxys
+                        badProxy = BadProxy.objects.all().filter(user=userid)
+                    except ObjectDoesNotExist as DoesNotExist:
+                        print(red+"Fehler!!! ObjectDoesNotExist ")
+                else:
+                    try:
+                        if goodProxyCount == 0:
+                            newgoodProxy = goodProxys.create(user_id=userid,
+                                                            ipAdress=i.ipAdress,
+                                                            port=i.port,
+                                                            protokol = tesstproxy['protocols'][0],
+                                                            anonymitaetsLevel=tesstproxy["anonymity"],
+                                                            latenz=tesstproxy["timeout"],
+                                                            countryCode=tesstproxy["country_code"],
+                                                            country=tesstproxy["country"],
+                                                            )
+                            newgoodProxy.save()
+                            print(green+"Proxy mit der ID:",i.id,"wurde Validiert und zu GoodProxys hinzugefügt!!")
+
+                    except ObjectDoesNotExist as DoesNotExist:
+                        print("Fehler!!! ObjectDoesNotExist")
+            else:
+                print("Ist in der GoodProxy or BadProxy -list!")
+        print("alle Proxys wurden getestet!!!")
+
+#        return HttpResponse(text, content_type="text/plain")

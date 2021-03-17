@@ -6,15 +6,9 @@ Let's test if everything works until now. Run the following command.
 
 docker exec -t -i <DockerContainer-ID> bash
 docker exec -t -i vrahproxystardjango_web_1 bash python
-python manage.py makemigrations && python manage.py migrate
-
 
 # Im DockerContainer:
 python manage.py makemigrations && python manage.py migrate
-python ./manage.py createsuperuser \
-   --username admin \
-   --email admin@example.com \
-   --noinput
 
 
 # starte DockerContainer
@@ -22,6 +16,7 @@ python ./manage.py createsuperuser \
 
 docker exec -t -i vrahproxystardjango_web_1 bash python
 python -m pip freeze requirements.txt
+pip install -r requirements.txt
 
 
 # Debugger with python in the background

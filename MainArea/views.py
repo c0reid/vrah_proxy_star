@@ -18,7 +18,13 @@ from ProxyChecker.forms import UrlStringFormView
 
 # import der App aus dem ProxyChecker
 from ProxyChecker.models import GoodProxy , ProxyStringUrl
+from MainArea.models import UserProfileInfo
 # import der App aus dem ProxyChecker
+
+# Filter einbauen und Proxys sortieren
+from .filters import ProxyFilter
+
+
 
 import datetime
 import random
@@ -33,7 +39,7 @@ def home_page_view(request):
     defaultPorts = [80, 8080]
     onlineStatus = ["yes","no"]
     Protokoll = ["Socks5","Socks4","Http","Https"]
-    anonymitaet =["Elite","High Anonymous","Transparent","Anonymous"]
+    anonymitaet = ["Elite","High Anonymous","Transparent","Anonymous"]
     for proxy in goodProxys:
         proxys.append([
                         str(random.randint(1,10))+" min",
@@ -48,7 +54,7 @@ def home_page_view(request):
                         ])
         #ip = socket.inet_ntoa(struct.pack('>I', random.randint(1, 0xffffffff)))
         #port = str(defaultPorts[random.randint(0,1)])
-    print(proxys)
+    #print(proxys)
     return render(request,'home.html', {"ipList":proxys})
 #   return HttpResponse('Hello, World!')
 
@@ -59,19 +65,20 @@ def like_button(request):
    return render(request,"like/like_template.html",ctx)
 
 
-def UserDashboard(request):
-    url_strings = ProxyStringUrl.objects.all()
-    def get_queryset(self):
-        print("Proxystring abfrage!")
-        return self.model
 
+
+
+def UserDashboard(request):
+    # user = User.objects.get(id=request.user.id)
+    print("user id ist",request.user.id)
     random.seed()
     goodProxys = GoodProxy.objects.all()
-    for i in goodProxys:
-        print(i)
+    #filter = FilmFilter(request.GET, queryset = films)
+    Pcount= GoodProxy.objects.count()
     proxys=[]
     url_cForm = UrlStringFormView()
-    print("Count",len(goodProxys))
+    url_strings = ProxyStringUrl.objects.all()
+    proxyFilter = ProxyFilter(request.GET, queryset = goodProxys)
     try:
         for proxy in goodProxys:
             proxys.append([str(random.randint(1,10))+" min",
@@ -87,28 +94,33 @@ def UserDashboard(request):
         print(e)
         pass
 
+
     # Bereich um URLs in der DB zu speichern und ggf. zu chekchen Ajax Post-call
     if request.method == "POST" and request.is_ajax():
         form = UrlStringFormView(request.POST)
         if form.is_valid():
             user = request.user.id
-            urlstring = form.cleaned_data['urlstring']
+            formUrl = form.cleaned_data['urlstring']
             form.save()
-            return JsonResponse({"urlstring": urlstring}, status=200)
+            return JsonResponse({"urlstring": formUrl}, status=200)
         else:
             errors = form.errors.as_json()
             return JsonResponse({"errors": errors}, status=400)
+    #userProfile = UserProfileInfo.objects.get(user=User.o)
+
+
 
     return render(request,'userDashboard/dashboard0.html',{"ipList":proxys,
-                                                        'gPcount':goodProxys.count(),
+                                                        'gPcount':Pcount,
                                                         'countrys':"45664",
                                                         'save_url': url_cForm,
-                                                        'url_strings':url_strings
+                                                        'url_strings':url_strings,
+                                                        "proxyFilter":proxyFilter,
                                                         })
 
 # https://www.pluralsight.com/guides/work-with-ajax-django
 def login_request(request):
-    print("rendern! ")
+    #print("rendern! ")
     if request.method == 'POST':
         form = AuthenticationForm(request=request, data=request.POST)
         if form.is_valid():
@@ -119,7 +131,7 @@ def login_request(request):
                 login(request, user)
                 messages.info(request, f"You are now logged in as {username}")
                 print("Sie sind eingelogt")
-                return redirect('/dashboard')
+                return redirect('/')
                 # return redirect('/dashboard')
             else:
                 messages.error(request, "Invalid username or password.")
@@ -160,15 +172,8 @@ def register(request):
             user = user_form.save()
             username = user_form.cleaned_data.get('username')
             profile = profile_form.save(commit=False)
-            for i in request.POST:
-                print(i)
-            for i in profile_form:
-                print(i)
             if profile_form.is_valid():
-
                 profile.user = user
-                # profile.profile_pic = request.FILES['profile_pic']
-                profile.profile_pic = profile_form.cleaned_data["profile_pic"]
                 for i in request.FILES:
                     print(i)
                 if 'profile_pic' in request.FILES:
@@ -176,12 +181,10 @@ def register(request):
                     profile.profile_pic = request.FILES['profile_pic']
                 else:
                     print("ProfilePic not founded!")
-
                 print("Profile wird saved")
                 profile.save()
                 saved = True
             login(request, user)
-
             return redirect("main:login")
         else:
             print(user_form.errors,profile_form.errors)
@@ -202,6 +205,7 @@ def validate_username(request):
     }
     return JsonResponse(response)
 
+
 def contact_form(request):
     form = ContactForm()
     if request.method == "POST" and request.is_ajax():
@@ -215,6 +219,8 @@ def contact_form(request):
             return JsonResponse({"errors": errors}, status=400)
 
     return render(request, "contacts/contacts.html", {"form": form})
+
+
 
 class ContactFormView(FormView):
     template_name = 'contacts/contacts.html'

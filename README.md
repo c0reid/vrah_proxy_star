@@ -3,6 +3,7 @@
 	<img src="2Vrah-Proxy-Star.png" alt="Vrah-Proxy-Star">
 </h1>
 <h4 align="center">Advanced Proxy Scraper</h4>
+<h4 align="center">Demo <a href="https://vrah-proxy-star.it-solutions-klat.de/">https://vrah-proxy-star.it-solutions-klat.de/</a></h4>
 <p align="center">
 	<a href="https://pypi.org/project/Vrah-Proxy-Star/"><img src="https://img.shields.io/pypi/v/Vrah-Proxy-Star"></a>
 <a href="https://raw.githubusercontent.com/priyamharsh14/Vrah-Proxy-Star/master/LICENSE"><img src="https://img.shields.io/github/license/priyamharsh14/Vrah-Proxy-Star"></a>
@@ -28,7 +29,7 @@ according to IP ranges, location, speed and latency.
 
 New Installation:
 ```
-pip install
+pip install requirements.txt
 ```
 
 Updating the package:
