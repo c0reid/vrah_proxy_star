@@ -1,13 +1,13 @@
 from django.contrib import admin
-from .models import UserProxy, BadProxy, GoodProxy, LoadedPrxy,ProxyStringUrl, Proxy ,BadProxyy, GoodProxyy
+from .models import *
 # Register your models here.
 
 
 admin.site.register(UserProxy)
 admin.site.register(BadProxy)
 admin.site.register(GoodProxy)
-admin.site.register(LoadedPrxy)
 admin.site.register(ProxyStringUrl)
 admin.site.register(Proxy)
-admin.site.register(BadProxyy)
-admin.site.register(GoodProxyy)
+admin.site.register(ProxyCheckStamp)
+admin.site.register(ProxyLocation)
+admin.site.register(BlackListed)

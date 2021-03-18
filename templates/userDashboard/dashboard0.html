@@ -827,9 +827,7 @@
 
 
 
-                                                      {% for obj in proxyFilter.qs %}
-                                                      {{ obj.ipAdress }} - ${{ obj.port }}<br />
-                                                      {% endfor %}
+
                                                       </div>
 
 
@@ -938,24 +936,24 @@
                     </thead>
                     <tbody>
 
-                      {% for ip in ipList %}
+                      {% for obj in proxyFilter.qs %}
                       <tr class="text-center">
-                        <th>{{ip.0}}</th>
-                        <td>{{ip.1}}</td>
-                        <td>{{ip.2}}</td>
-                        <td>{{ip.3}}</td>
+                        <th>{#{rndInt}#}</th>
+                        <td>{{obj.ipAdress}}</td>
+                        <td>{{obj.port}}</td>
+                        <td>{{obj.country}}</td>
                         <td style="">
                           <div class="progress" style="">
-                            <div class="progress-bar progress-bar-striped" role="progressbar" style="width: {{ip.4}}%">{{ip.4}}%</div>
+                            <div class="progress-bar progress-bar-striped" role="progressbar" style=" width:{#{rndInt}#}%;">{#{ rndInt }#}%</div>
                           </div>
                         </td>
-                        <td>{{ip.5}}</td>
+                        <td>{{obj.latenz}}</td>
                         <td>{#{ip.6}#}
                           <img  src="{% static 'images/dashboard/green_light-effect.ico' %}" width="24" height="24" alt="onlinePic">
                           <!--img src="{% static 'images/dashboard/green_light-effect.ico' %}" alt="profilePic"-->
                         </i></td>
-                        <td>{{ip.7|title}}</td>
-                        <td>{{ip.8}}</td>
+                        <td>{{obj.protokol|title}}</td>
+                        <td>{{obj.anonymity|title}}</td>
                         <td><button type="button" id="PopoverCustomT-2" class="btn btn-primary btn-sm">Check</button></td>
                       </tr>
                       {% endfor %}
@@ -1639,6 +1637,9 @@
   </div>
   <script type="text/javascript" src="{% static 'userDashboard/assets/scripts/main.js' %}"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script>
+document.getElementById("randInt").innerHTML = Math.floor(Math.random() * 100);
+</script>
    <script>
      $(document).ready(function () {
               // catch the form's submit event

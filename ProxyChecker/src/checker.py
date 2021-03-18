@@ -1,5 +1,5 @@
 from proxy_checker import ProxyChecker
-from ProxyChecker.models import UserProxy, LoadedPrxy, GoodProxy, BadProxy
+from ProxyChecker.models import UserProxy, GoodProxy, BadProxy
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Count, Max
 from django.utils import timezone
@@ -122,7 +122,7 @@ def checkPROXY_DB(Request):
                                                             ipAdress=i.ipAdress,
                                                             port=i.port,
                                                             protokol = tesstproxy['protocols'][0],
-                                                            anonymitaetsLevel=tesstproxy["anonymity"],
+                                                            anonymity=tesstproxy["anonymity"],
                                                             latenz=tesstproxy["timeout"],
                                                             countryCode=tesstproxy["country_code"],
                                                             country=tesstproxy["country"],
@@ -186,7 +186,7 @@ def checkPROXY_DB(Request):
                                                             ipAdress=i.ipAdress,
                                                             port=i.port,
                                                             protokol = tesstproxy['protocols'][0],
-                                                            anonymitaetsLevel=tesstproxy["anonymity"],
+                                                            anonymity=tesstproxy["anonymity"],
                                                             latenz=tesstproxy["timeout"],
                                                             countryCode=tesstproxy["country_code"],
                                                             country=tesstproxy["country"],

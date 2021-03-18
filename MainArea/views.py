@@ -89,7 +89,7 @@ def UserDashboard(request):
                             int(proxy.latenz),
                             "online",
                             proxy.protokol,
-                            proxy.anonymitaetsLevel])
+                            proxy.anonymity])
     except Exception as e:
         print(e)
         pass
@@ -108,6 +108,9 @@ def UserDashboard(request):
             return JsonResponse({"errors": errors}, status=400)
     #userProfile = UserProfileInfo.objects.get(user=User.o)
 
+    rndInt = str(random.randint(1,100))
+    print(rndInt)
+
 
 
     return render(request,'userDashboard/dashboard0.html',{"ipList":proxys,
@@ -116,6 +119,7 @@ def UserDashboard(request):
                                                         'save_url': url_cForm,
                                                         'url_strings':url_strings,
                                                         "proxyFilter":proxyFilter,
+                                                        "rndInt":rndInt,
                                                         })
 
 # https://www.pluralsight.com/guides/work-with-ajax-django
@@ -252,3 +256,23 @@ class SignUpView(CreateView):
         valid = super().form_valid(form)
         login(self.request, self.object)
         return valid
+
+
+
+
+async def async_home(request):
+    """Display homepage by calling two services asynchronously (proper concurrency)"""
+    context = {}
+    try:
+        async with httpx.AsyncClient() as client:
+            response_p, response_r = await asyncio.gather(
+                client.get(PROMO_SERVICE_URL), client.get(RECCO_SERVICE_URL)
+            )
+
+            if response_p.status_code == httpx.codes.OK:
+                context["promo"] = response_p.json()
+            if response_r.status_code == httpx.codes.OK:
+                context["recco"] = response_r.json()
+    except httpx.RequestError as exc:
+        print(f"An error occurred while requesting {exc.request.url!r}.")
+    return render(request, "ind ex.html", context)
