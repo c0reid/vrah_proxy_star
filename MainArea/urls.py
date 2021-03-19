@@ -25,6 +25,3 @@ urlpatterns = [
     path('validate_username', validate_username, name='validate_username'),
     ###################
     ]
-
-
-    #path("favicon.ico",RedirectView.as_view(url=staticfiles_storage.url("favicon.ico")),)

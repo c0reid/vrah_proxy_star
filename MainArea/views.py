@@ -18,7 +18,7 @@ from ProxyChecker.forms import UrlStringFormView
 
 # import der App aus dem ProxyChecker
 from ProxyChecker.models import GoodProxy , ProxyStringUrl
-from MainArea.models import UserProfileInfo
+from MainArea.models import UserProfileInfo, UserProxys
 # import der App aus dem ProxyChecker
 
 # Filter einbauen und Proxys sortieren
@@ -35,6 +35,7 @@ import struct
 def home_page_view(request):
     random.seed()
     goodProxys = GoodProxy.objects.all()
+
     proxys=[]
     defaultPorts = [80, 8080]
     onlineStatus = ["yes","no"]
@@ -73,12 +74,15 @@ def UserDashboard(request):
     print("user id ist",request.user.id)
     random.seed()
     goodProxys = GoodProxy.objects.all()
-    #filter = FilmFilter(request.GET, queryset = films)
     Pcount= GoodProxy.objects.count()
     proxys=[]
+    userProxys = UserProxys.objects.all().count()
+    
+    print("alle Proxys" + str(userProxys))
     url_cForm = UrlStringFormView()
     url_strings = ProxyStringUrl.objects.all()
-    proxyFilter = ProxyFilter(request.GET, queryset = goodProxys)
+    # ProxyFilterForm
+    proxyFilter = ProxyFilter(request.GET, queryset = goodProxys) # ProxyFilterForm
     try:
         for proxy in goodProxys:
             proxys.append([str(random.randint(1,10))+" min",

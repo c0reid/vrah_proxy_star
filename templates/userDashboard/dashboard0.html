@@ -93,10 +93,7 @@
                 <div class="widget-content-left">
                   <div class="btn-group">
                     <a data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="p-0 btn">
-                      <img width="42" class="rounded-circle" src="{% static 'userDashboard/assets/images/avatars/1.jpg'%}" alt="">
                       <img width="42" class="rounded-circle" src="{{request.user.user_profile.profile_pic.url}}" alt="profile-pic">
-                      {{request.user.user_profile.profile_pic.url}}
-
                     </a>
                     <div tabindex="-1" role="menu" aria-hidden="true" class="dropdown-menu dropdown-menu-right">
                       <button type="button" tabindex="0" class="dropdown-item">User Account</button>
