@@ -15,12 +15,17 @@ random.seed()
 
 class ProxyLocation(models.Model):
     # Location Entitys
-    country = models.CharField(max_length=30,blank=True, default="--")
-    countryCode = models.CharField(max_length=2,blank=True, default="")
-    zipcode = models.CharField(max_length=14,blank=True, default="")
+    continent_code = models.CharField(max_length=2,blank=True, default="")
+    continent_name = models.CharField(max_length=15,blank=True, default="")
+    country_name = models.CharField(max_length=30,blank=True, default="")
+    country_code = models.CharField(max_length=2,blank=True, default="")
     city = models.CharField(max_length=50,blank=True, default="")
-    Latitude = models.DecimalField(max_digits=22, decimal_places=16, blank=True, null=True)
-    Longitude = models.DecimalField(max_digits=22, decimal_places=16, blank=True, null=True)
+    region = models.CharField(max_length=50,blank=True, default="")
+    postal_code = models.CharField(max_length=14,blank=True, default="")
+    dma_code = models.CharField(max_length=10,blank=True, default="")
+    latitude = models.DecimalField(max_digits=22, decimal_places=16, blank=True, null=True)
+    longitude = models.DecimalField(max_digits=22, decimal_places=16, blank=True, null=True)
+    time_zone = models.CharField(max_length=20,blank=True, default="")
 
 class BlackListed(models.Model):
     name = models.CharField(max_length=100)
@@ -29,7 +34,7 @@ class BlackListed(models.Model):
 
 class ProxyCheckStamp(models.Model):
     added = models.DateTimeField(verbose_name="Added", default=timezone.now)
-    working = models.BooleanField(verbose_name="Bad or Good Proxy")
+    working = models.BooleanField(verbose_name="Bad or Good Proxy",default=False)
     checked = models.DateTimeField(verbose_name="Last check", blank=True, default="")
     # Proxy Credentials
     proxy_user = models.CharField(max_length=50,default="")
@@ -65,6 +70,7 @@ class ProxyCheckStamp(models.Model):
     speed = models.IntegerField(default=80)
     def __str__(self):
         return self.checked
+
 
 class Proxy_Port(models.Model):
     port = models.SmallIntegerField(verbose_name="Port",blank=True)

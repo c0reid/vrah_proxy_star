@@ -49,6 +49,11 @@ INSTALLED_APPS = [
     'crispy_forms', # pip install django-crispy-forms
     'background_task',
     'django_filters', # pip install django-filter
+    'geoip2', # pip install geoip2
+    'django_user_agents',   # pip install pyyaml ua-parser user-agents
+                            # pip install django-user-agents
+
+
 ]
 
 MIDDLEWARE = [
@@ -60,6 +65,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django_user_agents.middleware.UserAgentMiddleware', # new
 ]
 
 ROOT_URLCONF = 'VrahProxyStar.urls'
@@ -154,3 +160,5 @@ STATICFILES_DIRS = [
         os.path.join(BASE_DIR, 'static'),
         os.path.join(BASE_DIR,'media'),
 ]
+
+GEOIP_PATH = os.path.join('geoip')

@@ -12,6 +12,18 @@ from django.urls import reverse_lazy
 
 from .src.checker import checkPROXY_DB, FarmProxysOS
 from .forms import InputCsvForm, UrlStringFormView
+# parts
+# - show the current user geolocation in the dashboard
+# - get Longtitude, Altitude and City from the Proxys
+
+# https://medium.com/@arrosid/get-visitor-location-using-geoip2-in-django-32ad3d417115
+
+from django.contrib.gis.geoip2 import GeoIP2
+from pprint import pprint
+g = GeoIP2()
+result = g.city('213.136.89.190')
+pprint(result)
+
 
 
 
@@ -193,3 +205,46 @@ def ajax_view(request):
             "msg": "It worked!!",
         }
         return JsonResponse(data)
+
+
+def BrowserLocation(request):
+    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+    if x_forwarded_for:
+        ip = x_forwarded_for.split(',')[0]
+    else:
+        ip = request.META.get('REMOTE_ADDR')
+
+
+    for i in request:
+        print(i)
+
+    device_type = ""
+    browser_type = ""
+    browser_version = ""
+    os_type = ""
+    os_version = ""
+    if request.user_agent.is_mobile:
+        device_type = "Mobile"
+    if request.user_agent.is_tablet:
+        device_type = "Tablet"
+    if request.user_agent.is_pc:
+        device_type = "PC"
+
+    browser_type = request.user_agent.browser.family
+    browser_version = request.user_agent.browser.version_string
+    os_type = request.user_agent.os.family
+    os_version = request.user_agent.os.version_string
+
+    g = GeoIP2()
+    location = g.city(ip)
+    location_country = location["country_name"]
+    location_city = location["city"]
+    context = {"ip": ip,
+                "device_type": device_type,
+                "browser_type": browser_type,
+                "browser_version": browser_version,
+                "os_type":os_type,
+                "os_version":os_version,
+                "location_country": location_country,
+                "location_city": location_city}
+    return context

@@ -11,7 +11,7 @@ from .views import contact_form , ContactFormView , validate_username, SignUpVie
 app_name = 'main'
 
 urlpatterns = [
-    path('dashboard/', views.home_page_view, name='home'),
+#    path('dashboard/', views.home_page_view, name='home'),
     path("", views.UserDashboard, name="dashboard"),
     path('save_url/', views.UserDashboard, name='save_url'),
     path("register/", views.register, name="register"),

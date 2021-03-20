@@ -15,8 +15,8 @@ python manage.py makemigrations && python manage.py migrate
 -  docker-compose up
 
 docker exec -t -i vrahproxystardjango_web_1 bash python
-python -m pip freeze requirements.txt
 pip install -r requirements.txt
+pip freeze > requirements.txt
 
 
 # Debugger with python in the background

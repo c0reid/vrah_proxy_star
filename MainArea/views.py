@@ -2,7 +2,6 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth import logout, authenticate, login
 from django.contrib.auth.models import User
 
-
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.urls import reverse, reverse_lazy
@@ -18,8 +17,8 @@ from ProxyChecker.forms import UrlStringFormView
 
 # import der App aus dem ProxyChecker
 from ProxyChecker.models import GoodProxy , ProxyStringUrl
+from ProxyChecker.views import BrowserLocation
 from MainArea.models import UserProfileInfo, UserProxys
-# import der App aus dem ProxyChecker
 
 # Filter einbauen und Proxys sortieren
 from .filters import ProxyFilter
@@ -32,55 +31,22 @@ import socket
 import struct
 
 
-def home_page_view(request):
-    random.seed()
-    goodProxys = GoodProxy.objects.all()
-
-    proxys=[]
-    defaultPorts = [80, 8080]
-    onlineStatus = ["yes","no"]
-    Protokoll = ["Socks5","Socks4","Http","Https"]
-    anonymitaet = ["Elite","High Anonymous","Transparent","Anonymous"]
-    for proxy in goodProxys:
-        proxys.append([
-                        str(random.randint(1,10))+" min",
-                        proxy.ipAdress, # ipAdresse
-                        str(proxy.port), # port
-                        proxy.country,
-                        str(random.randint(40,100)),
-                        int(proxy.latenz),
-                        "online",
-                        proxy.protokol,
-                        proxy.anonymitaetsLevel
-                        ])
-        #ip = socket.inet_ntoa(struct.pack('>I', random.randint(1, 0xffffffff)))
-        #port = str(defaultPorts[random.randint(0,1)])
-    #print(proxys)
-    return render(request,'home.html', {"ipList":proxys})
-#   return HttpResponse('Hello, World!')
-
-
-
-def like_button(request):
-   ctx={"hello":"hello"}
-   return render(request,"like/like_template.html",ctx)
-
-
-
-
-
 def UserDashboard(request):
     # user = User.objects.get(id=request.user.id)
     print("user id ist",request.user.id)
     random.seed()
     goodProxys = GoodProxy.objects.all()
-    Pcount= GoodProxy.objects.count()
+    Pcount= goodProxys.count()
     proxys=[]
     userProxys = UserProxys.objects.all().count()
-    
-    print("alle Proxys" + str(userProxys))
+
+    # count the Countries
+    countCountries = goodProxys.values('country').distinct().count()
+    print("Count countrys: " + str(countCountries))
+
     url_cForm = UrlStringFormView()
     url_strings = ProxyStringUrl.objects.all()
+
     # ProxyFilterForm
     proxyFilter = ProxyFilter(request.GET, queryset = goodProxys) # ProxyFilterForm
     try:
@@ -110,22 +76,27 @@ def UserDashboard(request):
         else:
             errors = form.errors.as_json()
             return JsonResponse({"errors": errors}, status=400)
-    #userProfile = UserProfileInfo.objects.get(user=User.o)
+    #rndInt = str(random.randint(1,100))
+    #print(rndInt)
+    browserData = BrowserLocation(request)
+    print(browserData)
 
-    rndInt = str(random.randint(1,100))
-    print(rndInt)
+    context = {"ipList":proxys,
+                'gPcount':Pcount,
+                'countrysCount':countCountries,
+                'save_url': url_cForm,
+                'url_strings':url_strings,
+                "proxyFilter":proxyFilter,
+                }
+    context.update(browserData) # added to the context
+    #print("Context updated: ",context)
 
 
+    return render(request,'userDashboard/dashboard0.html',context)
 
-    return render(request,'userDashboard/dashboard0.html',{"ipList":proxys,
-                                                        'gPcount':Pcount,
-                                                        'countrys':"45664",
-                                                        'save_url': url_cForm,
-                                                        'url_strings':url_strings,
-                                                        "proxyFilter":proxyFilter,
-                                                        "rndInt":rndInt,
-                                                        })
-
+def like_button(request):
+    ctx={"hello":"hello"}
+    return render(request,"like/like_template.html",ctx)
 # https://www.pluralsight.com/guides/work-with-ajax-django
 def login_request(request):
     #print("rendern! ")

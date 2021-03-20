@@ -748,7 +748,7 @@
                       <div class="widget-subheading">From everywhere</div>
                     </div>
                     <div class="widget-content-right">
-                      <div class="widget-numbers text-warning">3.3k Countrys</div>
+                      <div class="widget-numbers text-warning">{{countrysCount}} Countrys</div>
                     </div>
                   </div>
                 </div>
@@ -862,7 +862,7 @@
 
         <!---->
         <!---->
-        <div class="row">
+        <!--div class="row">
             <div class="col-md-4">
                 <div class="widget-content">
                     <div class="widget-content-wrapper">
@@ -902,7 +902,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div-->
 
           <div class="row">
             <div class="col-md-12">
@@ -920,7 +920,7 @@
                     <thead>
                       <tr class="text-center">
                         <th class="text-center">Updated(min)</th>
-                        <th class="text-center">IP Adress</th>
+                        <th class="text-center">IP Address</th>
                         <th class="text-center">Port</th>
                         <th class="text-center">Location</th>
                         <th class="text-center">Speed<br></th>
@@ -1048,6 +1048,24 @@
                         <div class="card-body">
                             <div class="card-title">Google Maps</div>
                             <div id="gmap-example"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="main-card mb-3 card">
+                        <div class="card-body">
+                            <div class="card-title">Google Maps</div>
+                            <div>
+                              <li>IP Address : {{ip}}</li>
+        <li>Device: {{ device_type}}</li>
+        <li>Browser: {{browser_type}} {{browser_version}}</li>
+        <li>OS: {{os_type}} {{os_version}}</li>
+        <li>City: {{ location_city }}</li>
+        <li>Country: {{ location_country }}</li>
+
+
+
+                            </div>
                         </div>
                     </div>
                 </div>
