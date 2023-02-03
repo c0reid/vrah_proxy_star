@@ -68,7 +68,7 @@
  *.cover
  .hypothesis/
 
- # Jupyter Notebook 
+ # Jupyter Notebook
  .ipynb_checkpoints
 
  # pyenv

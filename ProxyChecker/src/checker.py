@@ -103,6 +103,7 @@ def checkPROXY_DB(Request):
             if badProxyCount == 0 and goodProxyCount == 0:
                 print(defcol+"Proxy not in Bad and Good -Proxylist\nChecking Proxy:", str(i.id), i.ipAdress+":"+str(i.port))
                 tesstproxy=checker.check_proxy(i.ipAdress+":"+str(i.port))
+                print("testproxy",tesstproxy)
                 if tesstproxy == False:
                     try:
                         newbadProxy = badProxy.create(user_id=userid,
@@ -167,7 +168,8 @@ def checkPROXY_DB(Request):
             if badProxyCount == 0 and goodProxyCount == 0:
                 print(defcol+"Proxy not in Bad and Good -Proxylist\nChecking Proxy:", str(i.id), i.ipAdress+":"+str(i.port))
                 tesstproxy=checker.check_proxy(i.ipAdress+":"+str(i.port))
-                if tesstproxy == False:
+                print("Testproxy",tesstproxy)
+                if tesstproxy != False:
                     try:
                         newbadProxy = badProxy.create(user_id=userid,
                                                         ipAdress=i.ipAdress,

@@ -11,6 +11,8 @@ from django.contrib.auth.decorators import login_required
 from django.urls import reverse_lazy
 
 from .src.checker import checkPROXY_DB, FarmProxysOS
+from .src.ismyipbad import IsMyIpBad
+
 from .forms import InputCsvForm, UrlStringFormView
 # parts
 # - show the current user geolocation in the dashboard
@@ -20,9 +22,9 @@ from .forms import InputCsvForm, UrlStringFormView
 
 from django.contrib.gis.geoip2 import GeoIP2
 from pprint import pprint
-g = GeoIP2()
-result = g.city('213.136.89.190')
-pprint(result)
+#g = GeoIP2()
+#result = g.city('213.136.89.190')
+#pprint(result)
 
 
 
@@ -81,7 +83,6 @@ def upload_csv(request):
     """
     https://pythoncircle.com/post/30/how-to-upload-and-process-the-csv-file-in-django/
     """
-#if user.is_anonymous():
     if request.user.is_anonymous:
         anoymous = 2
         print(request.user.id,"\n\n\n")
@@ -174,11 +175,11 @@ def upload_csv(request):
                 messages.error(request, "Unable to upload file. " + repr(e))
 
 
-    def background_process():
-        print("\033[1;34m"+"process started")
-        checkPROXY_DB(request)
-        #FarmProxysOS()
-        print("\033[1;34m"+"process finished")
+    # def background_process():
+    #     print("\033[1;34m"+"process started")
+    #     checkPROXY_DB(request)
+    #     #FarmProxysOS()
+    #     print("\033[1;34m"+"process finished")
     #def index(request):
     #    import threading
     #    t = threading.Thread(target=background_process, args=(), kwargs={})
@@ -186,10 +187,10 @@ def upload_csv(request):
     #    t.start()
     #    return HttpResponse("main thread content")
 
-    import threading
-    t = threading.Thread(target=background_process, args=(), kwargs={})
-    t.setDaemon(True)
-    t.start()
+    # import threading
+    # t = threading.Thread(target=background_process, args=(), kwargs={})
+    # t.setDaemon(True)
+    # t.start()
 
     return HttpResponseRedirect(reverse("main:dashboard"))
 
@@ -208,12 +209,15 @@ def ajax_view(request):
 
 
 def BrowserLocation(request):
+
+
     x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
     if x_forwarded_for:
         ip = x_forwarded_for.split(',')[0]
     else:
         ip = request.META.get('REMOTE_ADDR')
 
+    #result = IsMyIpBad(ip)
 
     for i in request:
         print(i)

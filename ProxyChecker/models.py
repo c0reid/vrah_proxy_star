@@ -5,8 +5,7 @@ from datetime import datetime
 # Create your models here.
 import random
 """
-Proxy Socks5
-added GoodProxys, BadProxys, LoadedProxys and PorxyContainer -models to Proxychecker; Proxychecker is only ckecking when the proxy is not in BadProxys and GoodProxy, DB-commits working, homeSection is showing only working Proxys now"
+
 
 """
 random.seed()

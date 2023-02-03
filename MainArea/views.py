@@ -26,22 +26,27 @@ from .filters import ProxyFilter
 
 
 import datetime
-import random
 import socket
 import struct
+import random
 
+from django.contrib.gis.geos import GEOSGeometry
+from MainArea import worldMapProxy
+from django.contrib.gis.geos import Point
 
+from django.contrib.gis import gdal
+#print("ist die gdalLib istnalliert? ",gdal.HAS_GDAL)
+# https://stackoverflow.com/questions/58433776/how-to-install-gdal-library-in-docker-python-image
 def UserDashboard(request):
-    # user = User.objects.get(id=request.user.id)
+    #pnt = Point(5, 23)
+
+    #pnt = GEOSGeometry(buffer('\x01\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x14@\x00\x00\x00\x00\x00\x007@'))
     print("user id ist",request.user.id)
     random.seed()
     goodProxys = GoodProxy.objects.all()
     Pcount= goodProxys.count()
-    proxys=[]
-    userProxys = UserProxys.objects.all().count()
-
-    # count the Countries
     countCountries = goodProxys.values('country').distinct().count()
+    # count the Countries
     print("Count countrys: " + str(countCountries))
 
     url_cForm = UrlStringFormView()
@@ -49,6 +54,8 @@ def UserDashboard(request):
 
     # ProxyFilterForm
     proxyFilter = ProxyFilter(request.GET, queryset = goodProxys) # ProxyFilterForm
+
+    proxys=[]
     try:
         for proxy in goodProxys:
             proxys.append([str(random.randint(1,10))+" min",
@@ -78,8 +85,8 @@ def UserDashboard(request):
             return JsonResponse({"errors": errors}, status=400)
     #rndInt = str(random.randint(1,100))
     #print(rndInt)
-    browserData = BrowserLocation(request)
-    print(browserData)
+    #browserData = BrowserLocation(request)
+    #print(browserData)
 
     context = {"ipList":proxys,
                 'gPcount':Pcount,
@@ -88,7 +95,7 @@ def UserDashboard(request):
                 'url_strings':url_strings,
                 "proxyFilter":proxyFilter,
                 }
-    context.update(browserData) # added to the context
+    #context.update(browserData) # added to the context
     #print("Context updated: ",context)
 
 

